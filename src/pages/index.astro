@@ -1,16 +1,58 @@
+
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import { services } from "../data/services";
+import { site } from "../config/site";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Dani | Portfólio">
+  <section class="hero">
+    <span class="eyebrow">PORTFÓLIO DA DANI</span>
+
+    <h1>Soluções digitais, do conceito à entrega.</h1>
+
+    <p>
+      Desenvolvimento de software, automações
+      e produção audiovisual.
+    </p>
+  </section>
+
+  <section id="servicos">
+    <h2>Áreas de atuação</h2>
+
+    <div class="service-grid">
+      {services.map((service) => (
+        <ServiceCard service={service} />
+      ))}
+    </div>
+  </section>
+
+<section class="contact" id="contato">
+  <h2>Vamos conversar sobre seu projeto?</h2>
+
+  <p>
+    Desenvolvimento de software, automações e edição
+    de vídeo para necessidades reais.
+  </p>
+
+  <a href={`mailto:${site.email}`}>
+    Entrar em contato →
+  </a>
+</section>
+</BaseLayout>
+
+<style>
+  .service-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  #servicos,
+  .contact {
+    padding-block: 3rem;
+  }
+</style>

@@ -1,0 +1,48 @@
+
+---
+import type { Service } from "../data/services";
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+---
+
+<a class="service-card" href={`/servicos/${service.slug}/`}>
+  <h3>{service.title}</h3>
+  <p>{service.summary}</p>
+  <span>Explorar serviço →</span>
+</a>
+
+<style>
+  .service-card {
+    display: block;
+    padding: 1.5rem;
+    border: 1px solid #34384b;
+    border-radius: 14px;
+    background: #222638;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .service-card:hover {
+    border-color: #bba2ee;
+    transform: translateY(-3px);
+  }
+
+  .service-card:focus-visible {
+    outline: 2px solid #bba2ee;
+    outline-offset: 4px;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  span {
+    color: #c8adff;
+    font-weight: 600;
+  }
+</style>

@@ -1,0 +1,60 @@
+
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { services } from "../../data/services";
+import type { Service } from "../../data/services";
+
+export function getStaticPaths() {
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service }
+  }));
+}
+
+const { service } = Astro.props as {
+  service: Service;
+};
+---
+
+<BaseLayout title={`${service.title} | Dani`}>
+  <section class="service-detail">
+    <a href="/">← Voltar ao início</a>
+
+    <h1>{service.title}</h1>
+    <p>{service.description}</p>
+
+    <h2>O que posso oferecer</h2>
+
+    <ul>
+      {service.deliverables.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+
+    <h2>Projetos e trabalhos</h2>
+    <p>
+      Esta seção receberá os projetos relacionados
+      a esta especialidade.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .service-detail {
+    max-width: 800px;
+    padding-block: 4rem;
+  }
+
+  .service-detail a {
+    color: #c8adff;
+  }
+
+  .service-detail h2 {
+    margin-top: 3rem;
+  }
+
+  .service-detail li {
+    margin-block: 0.75rem;
+    line-height: 1.6;
+  }
+</style>

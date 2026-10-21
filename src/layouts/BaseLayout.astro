@@ -1,0 +1,42 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Portfólio da Dani: desenvolvimento de software, automações e edição de vídeo."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+
+    <meta name="description" content={description} />
+
+    <title>{title}</title>
+  </head>
+
+  <body>
+    <Header />
+
+    <main id="conteudo-principal" class="container">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>
