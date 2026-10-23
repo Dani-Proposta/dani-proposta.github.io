@@ -1,0 +1,108 @@
+
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { services } from "../../data/services";
+
+const projects = await getCollection("projects");
+---
+
+<BaseLayout title="Projetos | Dani">
+  <section class="projects-intro">
+    <span class="eyebrow">PORTFÓLIO</span>
+    <h1>Projetos e trabalhos</h1>
+
+    <p>
+      Conheça alguns dos projetos desenvolvidos,
+      tecnologias utilizadas e soluções implementadas.
+    </p>
+  </section>
+
+  <section class="projects-grid">
+    {projects.map((project) => (
+      <article class="project-card">
+        <span class="category">
+          {
+            services.find(
+              (service) =>
+                service.slug === project.data.service
+            )?.title
+          }
+        </span>
+
+        <h2>{project.data.title}</h2>
+
+        <p>{project.data.summary}</p>
+
+        <div class="technologies">
+          {project.data.technologies.map((technology) => (
+            <span>{technology}</span>
+          ))}
+        </div>
+
+        <p class="status">
+          Estado: {project.data.status}
+        </p>
+
+        <div class="links">
+          {project.data.repository && (
+            <a href={project.data.repository}>
+              Repositório ↗
+            </a>
+          )}
+
+          {project.data.demo && (
+            <a href={project.data.demo}>
+              Demonstração ↗
+            </a>
+          )}
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .projects-intro {
+    padding-block: 4rem 2rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .project-card {
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+  }
+
+  .category,
+  .status {
+    color: var(--color-accent);
+  }
+
+  .technologies,
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .technologies span {
+    padding: 0.35rem 0.65rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.8rem;
+  }
+
+  .project-card h2 {
+    margin-top: 1rem;
+  }
+</style>

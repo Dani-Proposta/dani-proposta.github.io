@@ -8,6 +8,7 @@ export const site = {
   navigation: [
     { label: "Início", href: "/" },
     { label: "Serviços", href: "/#servicos" },
+    { label: "Projetos", href: "/projetos/" },
     { label: "Contato", href: "/#contato" },
   ],
 } as const;
