@@ -1,22 +1,50 @@
+
 :root {
-  /* Cores principais */
-  --color-background: #151823;
-  --color-surface: #222638;
-  --color-text: #f5f1ff;
-  --color-muted: #c6c2d1;
-  --color-accent: #c0a3f8;
-  --color-border: #34384b;
+  /* Identidade cromática */
+  --color-background: #080b16;
+  --color-surface: #111728;
+  --color-surface-raised: #191e32;
 
-  /* Dimensões compartilhadas */
-  --content-width: 1100px;
+  --color-text: #f7f5ff;
+  --color-muted: #b9bdd4;
 
-  /* Aparência padrão */
+  --color-accent: #b18bff;
+  --color-accent-hover: #cfb2ff;
+  --color-accent-blue: #79a6ff;
+  --color-accent-warm: #ffb17a;
+
+  --color-border: #343b56;
+  --color-border-highlight: #7663b0;
+
+  /* Dimensões */
+  --content-width: 1180px;
+
+  /* Bordas arredondadas */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  /* Espaçamento */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+
+  /* Sombras */
+  --shadow-panel:
+    0 16px 40px rgba(0, 0, 0, 0.24);
+
+  --shadow-glow:
+    0 0 24px rgba(177, 139, 255, 0.14);
+
   font-family: system-ui, sans-serif;
   color: var(--color-text);
   background: var(--color-background);
   color-scheme: dark;
 }
 
+/* Normalização básica */
 * {
   box-sizing: border-box;
 }
@@ -30,8 +58,22 @@ body {
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
+
+  background:
+    radial-gradient(
+      ellipse at 78% 5%,
+      rgba(107, 67, 198, 0.16),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 5% 35%,
+      rgba(61, 88, 166, 0.10),
+      transparent 42%
+    ),
+    var(--color-background);
 }
 
+/* Estrutura compartilhada */
 main {
   flex: 1;
 }
@@ -41,8 +83,17 @@ main {
   margin-inline: auto;
 }
 
-a {
-  color: var(--color-accent);
+/* Tipografia */
+h1,
+h2,
+h3 {
+  color: var(--color-text);
+  line-height: 1.15;
+}
+
+h1 {
+  max-width: 760px;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
 }
 
 p {
@@ -50,6 +101,11 @@ p {
   line-height: 1.7;
 }
 
+a {
+  color: var(--color-accent);
+}
+
+/* Hero atual */
 .hero {
   padding-block: clamp(4rem, 8vw, 6rem);
 }
@@ -58,12 +114,39 @@ p {
   color: var(--color-accent);
   font-size: 0.8rem;
   letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
-h1 {
-  max-width: 760px;
-  font-size: clamp(2.4rem, 6vw, 4.5rem);
-  line-height: 1.1;
+/* Superfícies reutilizáveis */
+.panel {
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+}
+
+/* Marcadores de tecnologias */
+.chip {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.35rem 0.7rem;
+
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* Acessibilidade */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
