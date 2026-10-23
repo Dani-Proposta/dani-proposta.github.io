@@ -4,19 +4,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ServiceCard from "../components/ServiceCard.astro";
 import { services } from "../data/services";
 import { site } from "../config/site";
+import Hero from "../components/home/Hero.astro";
 ---
 
 <BaseLayout title="Dani | Portfólio">
-  <section class="hero">
-    <span class="eyebrow">PORTFÓLIO DA DANI</span>
-
-    <h1>Soluções digitais, do conceito à entrega.</h1>
-
-    <p>
-      Desenvolvimento de software, automações
-      e produção audiovisual.
-    </p>
-  </section>
+    <Hero />
 
   <section id="servicos">
     <h2>Áreas de atuação</h2>
