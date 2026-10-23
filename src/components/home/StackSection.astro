@@ -1,0 +1,233 @@
+
+---
+import { stackGroups } from "../../data/stack";
+---
+
+<section class="stack-section" aria-labelledby="stack-title">
+  <div class="stack-heading">
+    <span class="stack-eyebrow">
+      TECNOLOGIAS & FERRAMENTAS
+    </span>
+
+    <h2 id="stack-title">
+      As ferramentas por trás das soluções.
+    </h2>
+
+    <p>
+      Tecnologias e ferramentas que utilizo em
+      desenvolvimento de software, automação
+      e produção audiovisual.
+    </p>
+  </div>
+
+  <div class="stack-grid">
+    {stackGroups.map((group) => (
+      <article
+        class="stack-panel"
+        data-area={group.area}
+        id={`stack-${group.id}`}
+      >
+        <div class="stack-panel__heading">
+          <span class="stack-panel__category">
+            {group.area === "development"
+              ? "DESENVOLVIMENTO"
+              : "AUDIOVISUAL"}
+          </span>
+
+          <h3>{group.title}</h3>
+
+          <p>{group.description}</p>
+        </div>
+
+        <ul class="stack-items">
+          {group.items.map((item) => (
+            <li class="stack-chip">
+              {item}
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .stack-section {
+    padding-block: 4rem 5rem;
+  }
+
+  .stack-heading {
+    max-width: 690px;
+    margin-bottom: 2rem;
+  }
+
+  .stack-eyebrow {
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+
+  .stack-heading h2 {
+    margin-block: 1rem;
+    font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+  }
+
+  .stack-heading p {
+    max-width: 560px;
+  }
+
+  /* Grade de painéis */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .stack-panel {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    padding: clamp(1.25rem, 2.5vw, 1.8rem);
+    min-width: 0;
+    min-height: 230px;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(177, 139, 255, 0.07),
+        transparent 60%
+      ),
+      var(--color-surface);
+
+    box-shadow: var(--shadow-panel);
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  /* Detalhe luminoso superior */
+  .stack-panel::before {
+    content: "";
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(177, 139, 255, 0.65),
+      transparent
+    );
+  }
+
+  .stack-panel:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-border-highlight);
+
+    box-shadow:
+      var(--shadow-panel),
+      var(--shadow-glow);
+  }
+
+  /* Variação audiovisual */
+  .stack-panel[data-area="audiovisual"] {
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 177, 122, 0.055),
+        transparent 60%
+      ),
+      var(--color-surface);
+  }
+
+  .stack-panel[data-area="audiovisual"]::before {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 177, 122, 0.55),
+      transparent
+    );
+  }
+
+  /* Conteúdo dos painéis */
+  .stack-panel__category {
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .stack-panel[data-area="audiovisual"]
+  .stack-panel__category {
+    color: var(--color-accent-warm);
+  }
+
+  .stack-panel h3 {
+    margin-block: 0.75rem;
+    font-size: 1.25rem;
+  }
+
+  .stack-panel p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  /* Chips de tecnologia */
+  .stack-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+
+    margin: auto 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stack-chip {
+    padding: 0.45rem 0.8rem;
+
+    color: #ded8f1;
+    font-size: 0.8rem;
+    line-height: 1.3;
+
+    background: rgba(255, 255, 255, 0.035);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Responsividade */
+  @media (max-width: 720px) {
+    .stack-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stack-panel {
+      min-height: auto;
+    }
+  }
+
+  /* Acessibilidade */
+  @media (prefers-reduced-motion: reduce) {
+    .stack-panel {
+      transition: none;
+    }
+
+    .stack-panel:hover {
+      transform: none;
+    }
+  }
+</style>

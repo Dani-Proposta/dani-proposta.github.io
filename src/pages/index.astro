@@ -5,20 +5,13 @@ import ServiceCard from "../components/ServiceCard.astro";
 import { services } from "../data/services";
 import { site } from "../config/site";
 import Hero from "../components/home/Hero.astro";
+import StackSection from "../components/home/StackSection.astro";
 ---
 
 <BaseLayout title="Dani | Portfólio">
     <Hero />
 
-  <section id="servicos">
-    <h2>Áreas de atuação</h2>
-
-    <div class="service-grid">
-      {services.map((service) => (
-        <ServiceCard service={service} />
-      ))}
-    </div>
-  </section>
+  <StackSection />
 
 <section class="contact" id="contato">
   <h2>Vamos conversar sobre seu projeto?</h2>
