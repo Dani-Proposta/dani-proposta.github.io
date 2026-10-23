@@ -1,0 +1,70 @@
+
+---
+import type { CollectionEntry } from "astro:content";
+import { services } from "../data/services";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+
+const service = services.find(
+  (item) => item.slug === project.data.service
+);
+---
+
+<article class="project-card">
+  <p class="category">{service?.title ?? "Projeto"}</p>
+
+  <h2>{project.data.title}</h2>
+
+  <p>{project.data.summary}</p>
+
+  <div class="technologies">
+    {project.data.technologies.map((technology) => (
+      <span>{technology}</span>
+    ))}
+  </div>
+
+  <a href={`/projetos/${project.id}/`}>
+    Ver projeto completo →
+  </a>
+</article>
+
+<style>
+  .project-card {
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: var(--color-surface);
+  }
+
+  .category {
+    color: var(--color-accent);
+    font-size: 0.85rem;
+  }
+
+  h2 {
+    margin-block: 1rem;
+  }
+
+  .technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: 1.5rem;
+  }
+
+  .technologies span {
+    padding: 0.35rem 0.65rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.8rem;
+  }
+
+  a {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+</style>

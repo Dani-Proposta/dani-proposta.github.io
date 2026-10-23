@@ -17,8 +17,6 @@ repository: "https://github.com/Dani-Proposta/dani-proposta.github.io"
 demo: "https://dani-proposta.github.io/"
 ---
 
-# Portfólio Profissional
-
 ## Objetivo
 
 Desenvolver uma plataforma pessoal para apresentar

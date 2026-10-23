@@ -1,0 +1,146 @@
+
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { services } from "../../data/services";
+
+// Gera uma URL para cada projeto da coleção.
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+// Define o tipo dos dados recebidos pela página.
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+
+// Converte o corpo Markdown em um componente renderizável.
+const { Content } = await render(project);
+
+const service = services.find(
+  (item) => item.slug === project.data.service
+);
+---
+
+<BaseLayout
+  title={`${project.data.title} | Dani`}
+  description={project.data.summary}
+>
+  <article class="project-page">
+    <a class="back-link" href="/projetos/">
+      ← Voltar aos projetos
+    </a>
+
+    <header class="project-heading">
+      <p class="category">
+        {service?.title ?? "Projeto"}
+      </p>
+
+      <h1>{project.data.title}</h1>
+
+      <p>{project.data.summary}</p>
+
+      <div class="technologies">
+        {project.data.technologies.map((technology) => (
+          <span>{technology}</span>
+        ))}
+      </div>
+    </header>
+
+    <div class="project-documentation">
+      <Content />
+    </div>
+
+    <footer class="project-links">
+      {project.data.repository && (
+        <a
+          href={project.data.repository}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ver repositório ↗
+        </a>
+      )}
+
+      {project.data.demo && (
+        <a
+          href={project.data.demo}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Abrir demonstração ↗
+        </a>
+      )}
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-page {
+    max-width: 850px;
+    margin-inline: auto;
+    padding-block: 3rem 5rem;
+  }
+
+  .back-link,
+  .category {
+    color: var(--color-accent);
+  }
+
+  .project-heading {
+    margin-top: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .technologies span {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+
+  .project-documentation {
+    padding-block: 2rem;
+    line-height: 1.8;
+  }
+
+  .project-documentation :global(h2) {
+    margin-top: 2.5rem;
+    color: var(--color-text);
+  }
+
+  .project-documentation :global(p),
+  .project-documentation :global(li) {
+    color: var(--color-muted);
+  }
+
+  .project-documentation :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>
