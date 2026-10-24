@@ -1,0 +1,520 @@
+
+---
+import { services } from "../../data/services";
+
+const selectedServices = ["programacao", "edicao-video"]
+  .flatMap((slug) => {
+    const service = services.find((item) => item.slug === slug);
+    return service ? [service] : [];
+  });
+---
+
+<section
+  class="services-showcase"
+  id="servicos"
+  aria-labelledby="services-title"
+>
+  <div class="services-layout">
+    <div class="services-intro">
+      <span class="section-eyebrow">ÁREAS DE ATUAÇÃO</span>
+
+      <h2 id="services-title">
+        Do planejamento à entrega.
+      </h2>
+
+      <p>
+        Desenvolvimento e edição audiovisual
+        com atenção aos detalhes e foco
+        em resultados.
+      </p>
+    </div>
+
+    {selectedServices.map((service) => (
+      <a
+        class="service-card"
+        data-kind={service.slug}
+        href={`/servicos/${service.slug}/`}
+      >
+        <span class="service-card__arrow" aria-hidden="true">
+          ↗
+        </span>
+
+        <div class="service-card__art" aria-hidden="true">
+          {service.slug === "programacao" ? (
+            <div class="code-window">
+              <div class="code-window__header">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="code-window__body">
+                <i class="code-line code-line--one"></i>
+                <i class="code-line code-line--two"></i>
+                <i class="code-line code-line--three"></i>
+                <i class="code-line code-line--four"></i>
+                <i class="code-line code-line--five"></i>
+                <i class="code-line code-line--six"></i>
+              </div>
+            </div>
+          ) : (
+            <div class="video-window">
+              <div class="video-preview">
+                <span class="video-play">▶</span>
+              </div>
+              <div class="video-timeline">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div class="service-card__content">
+          <span class="service-card__icon" aria-hidden="true">
+            {service.slug === "programacao" ? "</>" : "▶"}
+          </span>
+
+          <h3>{service.title}</h3>
+          <p>{service.summary}</p>
+
+          <div class="service-card__tags">
+            {service.slug === "programacao" ? (
+              <>
+                <span>APIs</span>
+                <span>Automações</span>
+                <span>Sistemas</span>
+              </>
+            ) : (
+              <>
+                <span>Edição</span>
+                <span>Pós-produção</span>
+                <span>Motion</span>
+              </>
+            )}
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .services-showcase {
+    padding-block: 3rem;
+  }
+
+  .services-layout {
+    display: grid;
+    grid-template-columns:
+      minmax(200px, 0.9fr)
+      repeat(2, minmax(0, 1.35fr));
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .services-intro {
+    align-self: center;
+    padding: 1.25rem 1rem 1.25rem 0;
+  }
+
+  .section-eyebrow {
+    color: var(--color-accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+
+  .services-intro h2 {
+    margin-block: 1rem;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    line-height: 1.15;
+  }
+
+  .services-intro p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  /* Painéis de serviço */
+  .service-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    display: flex;
+    min-width: 0;
+    min-height: 260px;
+    padding: 1.5rem;
+
+    color: var(--color-text);
+    text-decoration: none;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background:
+      linear-gradient(
+        125deg,
+        rgba(177, 139, 255, 0.13),
+        transparent 75%
+      ),
+      var(--color-surface);
+
+    box-shadow: var(--shadow-panel);
+
+    transition:
+      transform 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent);
+    box-shadow:
+      var(--shadow-panel),
+      var(--shadow-glow);
+  }
+
+  /* Detalhe superior */
+  .service-card::before {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 12%;
+    width: 45%;
+    height: 2px;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent),
+      transparent
+    );
+  }
+
+  /* Variação audiovisual */
+  .service-card[data-kind="edicao-video"] {
+    background:
+      linear-gradient(
+        125deg,
+        rgba(255, 177, 122, 0.1),
+        transparent 75%
+      ),
+      var(--color-surface);
+  }
+
+  .service-card[data-kind="edicao-video"]::before {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-warm),
+      transparent
+    );
+  }
+
+  .service-card[data-kind="edicao-video"]:hover {
+    border-color: var(--color-accent-warm);
+    box-shadow:
+      var(--shadow-panel),
+      0 0 25px rgba(255, 177, 122, 0.1);
+  }
+
+  /* Conteúdo */
+  .service-card__content {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: 65%;
+    min-height: 100%;
+  }
+
+  .service-card__icon {
+    display: grid;
+    place-items: center;
+
+    width: 42px;
+    height: 42px;
+    margin-bottom: 1.5rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.4);
+    border-radius: 12px;
+
+    color: var(--color-accent);
+    background: rgba(177, 139, 255, 0.12);
+
+    font-weight: 700;
+  }
+
+  .service-card[data-kind="edicao-video"]
+  .service-card__icon {
+    color: var(--color-accent-warm);
+    background: rgba(255, 177, 122, 0.1);
+    border-color: rgba(255, 177, 122, 0.35);
+  }
+
+  .service-card h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.3rem;
+  }
+
+  .service-card p {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .service-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+
+  .service-card__tags span {
+    padding: 0.3rem 0.55rem;
+
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+
+    color: var(--color-muted);
+    background: rgba(8, 11, 22, 0.75);
+
+    font-size: 0.68rem;
+  }
+
+  .service-card__arrow {
+    position: absolute;
+    z-index: 5;
+    right: 1rem;
+    top: 1rem;
+
+    display: grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+
+    border: 1px solid var(--color-border-highlight);
+    border-radius: 50%;
+
+    color: var(--color-text);
+    background: rgba(8, 11, 22, 0.7);
+  }
+
+  /* Ilustrações */
+  .service-card__art {
+    position: absolute;
+    z-index: 0;
+    top: 18%;
+    right: -12%;
+
+    width: 59%;
+    height: 70%;
+
+    transform: rotate(-8deg);
+    pointer-events: none;
+  }
+
+  /* Janela de código */
+  .code-window {
+    height: 100%;
+    border: 1px solid #514779;
+    border-radius: 12px;
+
+    background: #0a0d1c;
+
+    box-shadow:
+      0 10px 35px #05040e,
+      0 0 35px rgba(146, 96, 255, 0.2);
+  }
+
+  .code-window__header {
+    display: flex;
+    gap: 5px;
+    padding: 12px;
+
+    border-bottom: 1px solid #302b49;
+  }
+
+  .code-window__header span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #6f658c;
+  }
+
+  .code-window__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 18px 14px;
+  }
+
+  .code-line {
+    display: block;
+    height: 5px;
+    border-radius: 4px;
+  }
+
+  .code-line--one {
+    width: 70%;
+    background: #aa83ff;
+  }
+
+  .code-line--two {
+    width: 45%;
+    margin-left: 12%;
+    background: #79a6ff;
+  }
+
+  .code-line--three {
+    width: 62%;
+    margin-left: 12%;
+    background: #ffb17a;
+  }
+
+  .code-line--four {
+    width: 38%;
+    margin-left: 20%;
+    background: #85dec6;
+  }
+
+  .code-line--five {
+    width: 65%;
+    margin-left: 12%;
+    background: #aa83ff;
+  }
+
+  .code-line--six {
+    width: 42%;
+    background: #79a6ff;
+  }
+
+  /* Editor de vídeo */
+  .video-window {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    height: 100%;
+    padding: 12px;
+
+    border: 1px solid #654c7a;
+    border-radius: 12px;
+
+    background: #0d1020;
+
+    box-shadow:
+      0 10px 35px #05040e,
+      0 0 35px rgba(255, 177, 122, 0.12);
+  }
+
+  .video-preview {
+    display: grid;
+    place-items: center;
+    flex: 1;
+    min-height: 0;
+
+    border-radius: 6px;
+
+    background:
+      radial-gradient(
+        ellipse at 60% 85%,
+        rgba(255, 158, 112, 0.8),
+        transparent 40%
+      ),
+      linear-gradient(
+        160deg,
+        #29214d,
+        #864a85 60%,
+        #231c3b
+      );
+  }
+
+  .video-play {
+    display: grid;
+    place-items: center;
+
+    width: 35px;
+    height: 35px;
+
+    color: white;
+    border: 1px solid rgba(255,255,255,0.65);
+    border-radius: 50%;
+    background: rgba(8, 11, 22, 0.65);
+    font-size: 0.85rem;
+  }
+
+  .video-timeline {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 1fr;
+    gap: 4px;
+    height: 32px;
+  }
+
+  .video-timeline span {
+    border-radius: 3px;
+    background: #8053c4;
+  }
+
+  .video-timeline span:nth-child(2) {
+    background: #de8e8b;
+  }
+
+  .video-timeline span:nth-child(3) {
+    background: #638ccb;
+  }
+
+  .video-timeline span:nth-child(4) {
+    background: #b17af6;
+  }
+
+  /* Tablets */
+  @media (max-width: 1080px) {
+    .services-layout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .services-intro {
+      grid-column: 1 / -1;
+      max-width: 620px;
+    }
+  }
+
+  /* Celulares */
+  @media (max-width: 680px) {
+    .services-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .service-card {
+      min-height: 260px;
+    }
+
+    .service-card__art {
+      opacity: 0.45;
+    }
+
+    .service-card__content {
+      width: 80%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-card {
+      transition: none;
+    }
+
+    .service-card:hover {
+      transform: none;
+    }
+  }
+</style>
