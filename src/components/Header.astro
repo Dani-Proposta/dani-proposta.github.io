@@ -1,73 +1,212 @@
+
 ---
-import { site } from "../config/site";
+const navItems = [
+  { id: "inicio", label: "Início", href: "/#inicio" },
+  { id: "servicos", label: "Serviços", href: "/#servicos" },
+  { id: "projetos", label: "Projetos", href: "/#projetos" },
+  { id: "faq", label: "FAQ", href: "/#faq" },
+  { id: "contato", label: "Contato", href: "/#contato" }
+];
+
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+
+const initialActive =
+  pathname === "/"
+    ? "inicio"
+    : pathname.startsWith("/projetos")
+      ? "projetos"
+      : pathname.startsWith("/servicos")
+        ? "servicos"
+        : "";
 ---
 
 <header class="site-header">
-  <div class="container header-content">
-    <a class="logo" href="/" aria-label="Dani - Página inicial">
-      {site.name}<span aria-hidden="true">.</span>
+  <div class="site-header__inner">
+    <a
+      class="site-header__brand"
+      href="/#inicio"
+      aria-label="Dani — Voltar ao início"
+    >
+      Dani<span>.</span>
     </a>
 
-    <nav aria-label="Navegação principal">
-      <ul>
-        {site.navigation.map((item) => (
-          <li>
-            <a href={item.href}>
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+    <nav
+      class="site-nav"
+      aria-label="Navegação principal"
+    >
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          data-nav-section={item.id}
+          class:list={[
+            "site-nav__link",
+            { "is-active": initialActive === item.id }
+          ]}
+          aria-current={
+            initialActive === item.id
+              ? "location"
+              : undefined
+          }
+        >
+          {item.label}
+        </a>
+      ))}
     </nav>
   </div>
 </header>
 
 <style>
+  /* Estrutura do Header */
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    width: 100%;
+
+    background: rgba(8, 11, 22, 0.82);
     border-bottom: 1px solid var(--color-border);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
   }
 
-  .header-content {
+  .site-header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding-block: 1.25rem;
+
+    gap: 2rem;
+
+    width: min(var(--content-width), 90%);
+    min-height: 72px;
+    margin-inline: auto;
   }
 
-  .logo {
+  /* Identidade */
+  .site-header__brand {
+    flex-shrink: 0;
+
     color: var(--color-text);
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 800;
     text-decoration: none;
+    letter-spacing: -0.04em;
   }
 
-  .logo span {
+  .site-header__brand span {
     color: var(--color-accent);
+
+    text-shadow:
+      0 0 12px rgba(177, 139, 255, 0.7);
   }
 
-  nav ul {
+  /* Navegação */
+  .site-nav {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    align-items: center;
+    gap: 0.35rem;
+
+    padding: 0.35rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.16);
+    border-radius: 999px;
+
+    background: rgba(17, 23, 40, 0.7);
   }
 
-  nav a {
+  .site-nav__link {
+    position: relative;
+    flex-shrink: 0;
+
+    padding: 0.65rem 1rem;
+
     color: var(--color-muted);
+    font-size: 0.82rem;
+    font-weight: 500;
     text-decoration: none;
-    transition: color 0.2s;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    transition:
+      color 0.25s ease,
+      background 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
   }
 
-  nav a:hover {
-    color: var(--color-accent);
+  /* Item em destaque */
+  .site-nav__link.is-active {
+    color: #ffffff;
+
+    background: linear-gradient(
+      135deg,
+      rgba(102, 69, 185, 0.7),
+      rgba(162, 88, 224, 0.55)
+    );
+
+    border-color: rgba(197, 157, 255, 0.5);
+
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 16px rgba(177, 139, 255, 0.16);
   }
 
-  nav a:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 4px;
+  /* Pequeno brilho inferior */
+  .site-nav__link.is-active::after {
+    content: "";
+
+    position: absolute;
+    bottom: 3px;
+    left: 35%;
+
+    width: 30%;
+    height: 1px;
+
+    background: #d8bbff;
+
+    box-shadow:
+      0 0 9px #b18bff;
+  }
+
+  .site-nav__link:hover:not(.is-active) {
+    color: var(--color-text);
+
+    background: rgba(177, 139, 255, 0.08);
+    border-color: rgba(177, 139, 255, 0.2);
+  }
+
+  /* Adaptação para telas pequenas */
+  @media (max-width: 720px) {
+    .site-header__inner {
+      flex-wrap: wrap;
+      gap: 0.3rem;
+
+      padding-block: 0.75rem;
+    }
+
+    .site-nav {
+      width: 100%;
+      overflow-x: auto;
+
+      scrollbar-width: none;
+    }
+
+    .site-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .site-nav__link {
+      padding: 0.55rem 0.8rem;
+      font-size: 0.76rem;
+    }
+  }
+
+  /* Movimento reduzido */
+  @media (prefers-reduced-motion: reduce) {
+    .site-nav__link {
+      transition: none;
+    }
   }
 </style>

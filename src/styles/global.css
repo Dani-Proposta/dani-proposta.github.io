@@ -431,3 +431,55 @@ body::after { animation-duration: 3s; }
     transition: none;
   }
 }
+
+/* Espaçamento da navegação por âncoras */
+#inicio,
+#servicos,
+#projetos,
+#faq,
+#contato {
+  scroll-margin-top: 100px;
+}
+
+@media (max-width: 720px) {
+  #inicio,
+  #servicos,
+  #projetos,
+  #faq,
+  #contato {
+    scroll-margin-top: 135px;
+  }
+}
+
+/* Assinatura luminosa das introduções */
+.services-intro::after,
+.featured-intro::after {
+  content: "";
+  display: block;
+
+  width: min(210px, 80%);
+  height: 1px;
+
+  margin-top: 1.5rem;
+
+  background: linear-gradient(
+    90deg,
+    var(--color-accent),
+    rgba(177, 139, 255, 0.4),
+    transparent
+  );
+
+  box-shadow:
+    0 0 12px rgba(177, 139, 255, 0.35);
+}
+
+/* Navegação por âncora da Stack */
+#stack {
+  scroll-margin-top: 100px;
+}
+
+@media (max-width: 720px) {
+  #stack {
+    scroll-margin-top: 135px;
+  }
+}
