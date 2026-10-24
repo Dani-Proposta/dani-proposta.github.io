@@ -600,3 +600,52 @@ body::after { animation-duration: 3s; }
 .tech-panel:hover::after {
   opacity: 0.95;
 }
+
+/* Tipografia cósmica */
+:root {
+  --text-strong: #f9f8ff;
+  --text-violet: #dec6ff;
+  --text-blue: #a9c9ff;
+  --text-warm: #ffd1ad;
+
+  --color-muted: #c5c8db;
+}
+
+/* Títulos mais sólidos */
+:where(h1, h2, h3) {
+  color: var(--text-strong);
+  font-weight: 800;
+}
+
+:where(h1, h2) {
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+/* Palavra luminosa principal */
+.glow-word {
+  color: var(--text-violet);
+
+  text-shadow:
+    0 0 8px rgba(194, 149, 255, 0.55),
+    0 0 24px rgba(151, 88, 255, 0.35),
+    0 0 42px rgba(123, 68, 220, 0.16);
+}
+
+/* Variação azul */
+.glow-word--blue {
+  color: var(--text-blue);
+
+  text-shadow:
+    0 0 8px rgba(145, 187, 255, 0.5),
+    0 0 24px rgba(90, 138, 255, 0.3);
+}
+
+/* Variação quente */
+.glow-word--warm {
+  color: var(--text-warm);
+
+  text-shadow:
+    0 0 8px rgba(255, 183, 137, 0.5),
+    0 0 24px rgba(255, 131, 102, 0.25);
+}
