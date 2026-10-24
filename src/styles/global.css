@@ -174,3 +174,186 @@ a {
 html {
   overflow-x: clip;
 }
+
+
+/* Cosmic Interface 2.0 — Tokens */
+:root {
+  --cosmic-deep: #080b16;
+  --cosmic-surface: #111728;
+
+  --cosmic-violet: #b18bff;
+  --cosmic-blue: #79a6ff;
+  --cosmic-warm: #ffb17a;
+
+  --tech-grid: rgba(177, 139, 255, 0.055);
+  --tech-border: rgba(177, 139, 255, 0.35);
+  --tech-border-active: rgba(202, 168, 255, 0.75);
+
+  --tech-glow:
+    0 0 22px rgba(177, 139, 255, 0.14);
+
+  --tech-glow-strong:
+    0 0 32px rgba(177, 139, 255, 0.28);
+}
+
+/* Atmosfera cósmica */
+body {
+  position: relative;
+  isolation: isolate;
+
+  background:
+    radial-gradient(
+      ellipse at 78% 8%,
+      rgba(110, 54, 191, 0.18),
+      transparent 43%
+    ),
+    radial-gradient(
+      ellipse at 8% 47%,
+      rgba(64, 74, 158, 0.12),
+      transparent 46%
+    ),
+    radial-gradient(
+      ellipse at 80% 86%,
+      rgba(111, 46, 139, 0.07),
+      transparent 48%
+    ),
+    var(--cosmic-deep);
+}
+
+/* Camadas de estrelas */
+
+/* Camadas de estrelas */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: -55px;
+  z-index: -1;
+
+  pointer-events: none;
+  background-repeat: repeat;
+
+  will-change: transform, opacity;
+}
+
+/* Estrelas distantes */
+body::before {
+  background-image:
+    radial-gradient(
+      circle at 14% 27%,
+      rgba(236, 220, 255, 0.9) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 71% 58%,
+      rgba(151, 177, 255, 0.85) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 39% 81%,
+      rgba(255, 255, 255, 0.8) 0 0.8px,
+      transparent 1.8px
+    ),
+    radial-gradient(
+      circle at 84% 12%,
+      rgba(188, 148, 255, 0.85) 0 0.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 53% 39%,
+      rgba(190, 190, 255, 0.9) 0 0.8px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 26% 62%,
+      rgba(226, 192, 255, 0.8) 0 0.8px,
+      transparent 2px
+    );
+
+  background-size:
+    170px 145px,
+    235px 210px,
+    195px 230px,
+    280px 180px,
+    150px 255px,
+    255px 165px;
+
+  opacity: 0.75;
+
+  animation:
+    cosmic-stars-far 7s
+    ease-in-out infinite alternate;
+}
+
+/* Estrelas próximas */
+body::after {
+  background-image:
+    radial-gradient(
+      circle at 32% 45%,
+      rgba(255, 236, 255, 1) 0 1.5px,
+      rgba(177, 139, 255, 0.45) 2px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 78% 24%,
+      rgba(216, 194, 255, 1) 0 1.3px,
+      rgba(121, 166, 255, 0.3) 3px,
+      transparent 10px
+    ),
+    radial-gradient(
+      circle at 18% 82%,
+      rgba(255, 208, 240, 0.95) 0 1.2px,
+      rgba(177, 139, 255, 0.3) 3px,
+      transparent 9px
+    );
+
+  background-size:
+    330px 290px,
+    360px 260px,
+    310px 270px;
+
+  opacity: 0.85;
+
+  animation:
+    cosmic-stars-near 5s
+    ease-in-out infinite alternate;
+}
+
+/* Movimento das estrelas distantes */
+@keyframes cosmic-stars-far {
+  from {
+    opacity: 0.55;
+    transform: translate3d(-20px, -12px, 0);
+  }
+
+  to {
+    opacity: 0.95;
+    transform: translate3d(24px, 16px, 0);
+  }
+}
+
+/* Movimento das estrelas próximas */
+@keyframes cosmic-stars-near {
+  from {
+    opacity: 0.55;
+    transform: translate3d(24px, -20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(-26px, 22px, 0);
+  }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none;
+  }
+}
+/* Estrelas distantes */
+body::before { animation-duration: 4.5s; }
+
+/* Estrelas próximas */
+body::after { animation-duration: 3s; }
