@@ -9,6 +9,7 @@ const selectedServices = ["programacao", "edicao-video"]
   });
 
 import SectionMarker from "../ui/SectionMarker.astro";
+import PanelFrame from "../ui/PanelFrame.astro";
 ---
 
 <section
@@ -40,6 +41,7 @@ import SectionMarker from "../ui/SectionMarker.astro";
         data-kind={service.slug}
         href={`/servicos/${service.slug}/`}
       >
+        <PanelFrame />
         <span class="service-card__arrow" aria-hidden="true">
           ↗
         </span>

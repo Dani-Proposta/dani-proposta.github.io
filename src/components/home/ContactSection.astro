@@ -73,6 +73,8 @@ const activeChannels = channels.filter(
 );
 
 import SectionMarker from "../ui/SectionMarker.astro";
+import PanelFrame from "../ui/PanelFrame.astro";
+
 ---
 
 <section
@@ -80,7 +82,8 @@ import SectionMarker from "../ui/SectionMarker.astro";
   id="contato"
   aria-labelledby="contact-title"
 >
-  <div class="contact-panel">
+  <div class="contact-panel tech-panel">
+    <PanelFrame />
     <div class="contact-intro">
       <SectionMarker
         number="06"
@@ -116,7 +119,7 @@ import SectionMarker from "../ui/SectionMarker.astro";
     >
       {activeChannels.map((channel) => (
         <a
-          class="contact-card"
+          class="contact-card tech-panel"
           data-channel={channel.id}
           href={channel.href}
           target={channel.external ? "_blank" : undefined}
@@ -124,6 +127,7 @@ import SectionMarker from "../ui/SectionMarker.astro";
             ? "noopener noreferrer"
             : undefined}
         >
+            <PanelFrame />
           <div class="contact-card__top">
             <span
               class="contact-card__icon"

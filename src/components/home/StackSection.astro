@@ -2,6 +2,7 @@
 ---
 import { stackGroups } from "../../data/stack";
 import SectionMarker from "../ui/SectionMarker.astro";
+import PanelFrame from "../ui/PanelFrame.astro";
 ---
 
 <section
@@ -30,6 +31,7 @@ import SectionMarker from "../ui/SectionMarker.astro";
         data-area={group.area}
         id={`stack-${group.id}`}
       >
+        <PanelFrame />
         <div class="stack-panel__heading">
           <span class="stack-panel__category">
             {group.area === "development"

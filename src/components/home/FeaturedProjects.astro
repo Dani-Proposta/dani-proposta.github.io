@@ -16,6 +16,7 @@ const statusLabels: Record<string, string> = {
   "planejado": "Planejado"
 };
 import SectionMarker from "../ui/SectionMarker.astro";
+import PanelFrame from "../ui/PanelFrame.astro";
 ---
 
 <section
@@ -56,7 +57,8 @@ import SectionMarker from "../ui/SectionMarker.astro";
               class="featured-card"
               href={`/projetos/${project.id}/`}
               data-kind={project.data.service}
-            >
+            >  
+            <PanelFrame />
               <div class="featured-card__art" aria-hidden="true">
                 <span class="featured-card__orb"></span>
                 <span class="featured-card__symbol">

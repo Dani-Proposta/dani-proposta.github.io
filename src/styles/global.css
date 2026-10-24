@@ -483,3 +483,120 @@ body::after { animation-duration: 3s; }
     scroll-margin-top: 135px;
   }
 }
+
+
+/* Energia dos cantos tecnológicos */
+.tech-panel:hover .panel-frame {
+  filter: drop-shadow(
+    0 0 7px var(--panel-energy, #b18bff)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-panel:hover .panel-frame {
+    filter: none;
+  }
+}
+
+/* Energia luminosa dos painéis */
+.tech-panel {
+  --panel-glow: rgba(177, 139, 255, 0.23);
+  --panel-glow-hover: rgba(177, 139, 255, 0.42);
+}
+
+/* Energia audiovisual */
+.tech-panel[data-kind="edicao-video"],
+.tech-panel[data-area="audiovisual"] {
+  --panel-glow: rgba(255, 177, 122, 0.23);
+  --panel-glow-hover: rgba(255, 177, 122, 0.4);
+}
+
+/* Energia dos canais de contato */
+.tech-panel[data-channel="whatsapp"] {
+  --panel-energy: rgba(140, 231, 194, 0.85);
+  --panel-glow: rgba(140, 231, 194, 0.17);
+  --panel-glow-hover: rgba(140, 231, 194, 0.35);
+}
+
+.tech-panel[data-channel="discord"] {
+  --panel-energy: rgba(151, 164, 255, 0.85);
+  --panel-glow: rgba(151, 164, 255, 0.19);
+  --panel-glow-hover: rgba(151, 164, 255, 0.38);
+}
+
+.tech-panel[data-channel="github"] {
+  --panel-energy: rgba(255, 177, 122, 0.85);
+  --panel-glow: rgba(255, 177, 122, 0.17);
+  --panel-glow-hover: rgba(255, 177, 122, 0.36);
+}
+
+/* Luminosidade permanente */
+.tech-panel:is(
+  .service-card,
+  .stack-panel,
+  .featured-card,
+  .faq-item,
+  .contact-panel,
+  .contact-card
+) {
+  border-color: rgba(177, 139, 255, 0.45);
+
+  box-shadow:
+    var(--shadow-panel),
+    0 0 22px var(--panel-glow),
+    inset 0 0 14px rgba(177, 139, 255, 0.045);
+}
+
+/* Energia intensificada */
+.tech-panel:is(
+  .service-card,
+  .stack-panel,
+  .featured-card,
+  .faq-item,
+  .contact-panel,
+  .contact-card
+):hover,
+.tech-panel:is(
+  .service-card,
+  .stack-panel,
+  .featured-card,
+  .faq-item,
+  .contact-panel,
+  .contact-card
+):focus-within {
+  border-color: var(--panel-energy, #b18bff);
+
+  box-shadow:
+    var(--shadow-panel),
+    0 0 32px var(--panel-glow-hover),
+    inset 0 0 19px rgba(177, 139, 255, 0.09);
+}
+
+/* Cantos permanentemente luminosos */
+.tech-panel .panel-frame {
+  filter: drop-shadow(
+    0 0 6px var(--panel-energy, #b18bff)
+  );
+}
+
+/* Cantos reativos */
+.tech-panel:hover .panel-frame,
+.tech-panel:focus-within .panel-frame {
+  filter: drop-shadow(
+    0 0 12px var(--panel-energy, #b18bff)
+  );
+}
+
+/* Contato mantém detalhes mais delicados */
+.tech-panel.contact-card .panel-frame {
+  opacity: 0.65;
+}
+
+/* Quadriculado mais visível */
+.tech-panel::after {
+  opacity: 0.7;
+}
+
+.tech-panel:hover::after {
+  opacity: 0.95;
+}

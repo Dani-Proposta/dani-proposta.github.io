@@ -1,0 +1,178 @@
+
+<span class="panel-frame" aria-hidden="true">
+  <span class="panel-frame__corner panel-frame__corner--tl"></span>
+  <span class="panel-frame__corner panel-frame__corner--tr"></span>
+  <span class="panel-frame__corner panel-frame__corner--br"></span>
+  <span class="panel-frame__corner panel-frame__corner--bl"></span>
+
+  <span class="panel-frame__trace panel-frame__trace--top"></span>
+  <span class="panel-frame__trace panel-frame__trace--bottom"></span>
+
+  <span class="panel-frame__signals"></span>
+</span>
+
+<style>
+  /* Estrutura do acabamento */
+  .panel-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+
+    overflow: hidden;
+    border-radius: inherit;
+
+    color: var(--panel-energy, #b18bff);
+    pointer-events: none;
+
+    transition: filter 250ms ease;
+  }
+
+  /* Cantos geométricos */
+  .panel-frame__corner {
+    position: absolute;
+
+    width: 45px;
+    height: 45px;
+
+    border-top: 1px solid currentColor;
+    border-left: 1px solid currentColor;
+
+    opacity: 0.8;
+
+    filter: drop-shadow(
+      0 0 4px currentColor
+    );
+  }
+
+  /* Segmento iluminado */
+  .panel-frame__corner::before {
+    content: "";
+    position: absolute;
+
+    top: -1px;
+    left: 4px;
+
+    width: 19px;
+    height: 2px;
+
+    background: currentColor;
+
+    box-shadow:
+      0 0 8px currentColor;
+  }
+
+  /* Pequeno nó de energia */
+  .panel-frame__corner::after {
+    content: "";
+    position: absolute;
+
+    top: 24px;
+    left: -2px;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+    background: currentColor;
+
+    box-shadow:
+      0 0 8px currentColor;
+  }
+
+  /* Posicionamento dos cantos */
+  .panel-frame__corner--tl {
+    top: 10px;
+    left: 10px;
+  }
+
+  .panel-frame__corner--tr {
+    top: 10px;
+    right: 10px;
+    transform: rotate(90deg);
+  }
+
+  .panel-frame__corner--br {
+    right: 10px;
+    bottom: 10px;
+    transform: rotate(180deg);
+  }
+
+  .panel-frame__corner--bl {
+    bottom: 10px;
+    left: 10px;
+    transform: rotate(270deg);
+  }
+
+  /* Variação de intensidade */
+  .panel-frame__corner--tr,
+  .panel-frame__corner--bl {
+    opacity: 0.38;
+  }
+
+  /* Linhas técnicas */
+  .panel-frame__trace {
+    position: absolute;
+
+    height: 1px;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      currentColor,
+      transparent
+    );
+
+    opacity: 0.48;
+  }
+
+  .panel-frame__trace--top {
+    top: 0;
+    left: 24%;
+    width: 19%;
+  }
+
+  .panel-frame__trace--bottom {
+    bottom: 0;
+    right: 18%;
+    width: 24%;
+  }
+
+  /* Indicadores discretos */
+  .panel-frame__signals {
+    position: absolute;
+
+    top: 17px;
+    right: 68px;
+
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+    background: currentColor;
+
+    box-shadow:
+      8px 0 0 currentColor,
+      16px 0 0 currentColor;
+
+    opacity: 0.4;
+  }
+
+  /* Telas pequenas */
+  @media (max-width: 480px) {
+    .panel-frame__corner {
+      width: 30px;
+      height: 30px;
+    }
+
+    .panel-frame__signals {
+      display: none;
+    }
+  }
+
+  /* Movimento reduzido */
+  @media (prefers-reduced-motion: reduce) {
+    .panel-frame {
+      transition: none;
+    }
+  }
+</style>

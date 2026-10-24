@@ -34,7 +34,7 @@ const faqs = [
 ];
 
 import SectionMarker from "../ui/SectionMarker.astro";
-
+import PanelFrame from "../ui/PanelFrame.astro";
 ---
 
 <section
@@ -68,8 +68,9 @@ import SectionMarker from "../ui/SectionMarker.astro";
 
     <div class="faq-list">
       {faqs.map((faq, index) => (
-        <details class="faq-item" name="portfolio-faq">
+        <details class="faq-item tech-panel" name="portfolio-faq">
           <summary class="faq-question">
+            <PanelFrame />
             <span class="faq-number">
               {String(index + 1).padStart(2, "0")}
             </span>
