@@ -58,7 +58,7 @@
   .cosmic-hero {
     position: relative;
     isolation: isolate;
-    overflow: clip;
+    overflow: visible;
 
     display: flex;
     align-items: center;
@@ -176,21 +176,39 @@
 
   /* ARTE */
 
-  .cosmic-hero__visual {
+    .cosmic-hero__visual {
     position: absolute;
     z-index: 0;
 
-    width: min(75vw, 970px);
-    aspect-ratio: 926 / 404;
+    width: min(96vw, 1320px);
+    aspect-ratio: 1952 / 806;
 
-    right: -14%;
+    /* A imagem ultrapassa o container */
+    right: calc(50% - 59vw);
     top: 50%;
 
     transform: translateY(-50%);
     pointer-events: none;
-  }
 
-  .cosmic-hero__image {
+    /* Mistura a arte com o fundo à esquerda */
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.5) 21%,
+        black 44%
+    );
+
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.5) 21%,
+        black 44%
+    );
+    }
+
+    
+
+    .cosmic-hero__image {
     display: block;
 
     width: 100%;
@@ -198,10 +216,36 @@
 
     object-fit: contain;
 
+    /* Iluminação adicional */
     filter: drop-shadow(
-      0 0 34px rgba(172, 95, 255, 0.12)
+        0 0 34px rgba(172, 95, 255, 0.12)
     );
-  }
+
+    /* Integração superior e inferior */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.25) 8%,
+        rgba(0, 0, 0, 0.75) 16%,
+        black 24%,
+        black 66%,
+        rgba(0, 0, 0, 0.88) 76%,
+        rgba(0, 0, 0, 0.48) 88%,
+        transparent 100%
+    );
+
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.25) 8%,
+        rgba(0, 0, 0, 0.75) 16%,
+        black 24%,
+        black 66%,
+        rgba(0, 0, 0, 0.88) 76%,
+        rgba(0, 0, 0, 0.48) 88%,
+        transparent 100%
+    );
+    }
 
   /* TELAS MENORES */
 
@@ -213,12 +257,12 @@
     }
 
     .cosmic-hero__visual {
-      width: min(145vw, 760px);
+    width: 165vw;
 
-      right: -52%;
-      top: 65%;
+    right: -35vw;
+    top: 65%;
 
-      opacity: 0.4;
+    opacity: 0.35;
     }
 
     .cosmic-hero__content {
