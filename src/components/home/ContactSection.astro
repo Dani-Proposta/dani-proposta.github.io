@@ -71,6 +71,8 @@ const channels: ContactChannel[] = [
 const activeChannels = channels.filter(
   (channel) => channel.href.length > 0
 );
+
+import SectionMarker from "../ui/SectionMarker.astro";
 ---
 
 <section
@@ -80,9 +82,10 @@ const activeChannels = channels.filter(
 >
   <div class="contact-panel">
     <div class="contact-intro">
-      <span class="contact-eyebrow">
-        CONTATO / COLABORAÇÃO
-      </span>
+      <SectionMarker
+        number="06"
+        label="CONTATO / COLABORAÇÃO"
+        />
 
       <h2 id="contact-title">
         Vamos construir

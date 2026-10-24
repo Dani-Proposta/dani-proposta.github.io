@@ -1,13 +1,15 @@
 
 ---
 import { stackGroups } from "../../data/stack";
+import SectionMarker from "../ui/SectionMarker.astro";
 ---
 
 <section class="stack-section" aria-labelledby="stack-title">
   <div class="stack-heading">
-    <span class="stack-eyebrow">
-      TECNOLOGIAS & FERRAMENTAS
-    </span>
+    <SectionMarker
+    number="03"
+    label="TECNOLOGIAS & FERRAMENTAS"
+    />
 
     <h2 id="stack-title">
       As ferramentas por trás das soluções.
@@ -23,7 +25,7 @@ import { stackGroups } from "../../data/stack";
   <div class="stack-grid">
     {stackGroups.map((group) => (
       <article
-        class="stack-panel"
+        class="stack-panel tech-panel"
         data-area={group.area}
         id={`stack-${group.id}`}
       >

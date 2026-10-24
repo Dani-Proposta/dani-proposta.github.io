@@ -15,6 +15,7 @@ const statusLabels: Record<string, string> = {
   "em-desenvolvimento": "Em desenvolvimento",
   "planejado": "Planejado"
 };
+import SectionMarker from "../ui/SectionMarker.astro";
 ---
 
 <section
@@ -24,9 +25,10 @@ const statusLabels: Record<string, string> = {
 >
   <div class="featured-layout">
     <div class="featured-intro">
-      <span class="featured-eyebrow">
-        PROJETOS EM DESTAQUE
-      </span>
+        <SectionMarker
+        number="04"
+        label="PROJETOS EM DESTAQUE"
+        />
 
       <h2 id="featured-title">
         Da ideia à execução.

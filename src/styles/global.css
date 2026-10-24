@@ -357,3 +357,77 @@ body::before { animation-duration: 4.5s; }
 
 /* Estrelas próximas */
 body::after { animation-duration: 3s; }
+
+
+/* Painéis tecnológicos */
+.tech-panel {
+  --panel-energy: rgba(177, 139, 255, 0.8);
+
+  position: relative;
+  isolation: isolate;
+}
+
+/* Energia alternativa do audiovisual */
+.tech-panel[data-kind="edicao-video"],
+.tech-panel[data-area="audiovisual"] {
+  --panel-energy: rgba(255, 177, 122, 0.8);
+}
+
+/* Grid técnico e cantos energizados */
+.tech-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  border-radius: inherit;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      var(--panel-energy),
+      var(--panel-energy)
+    ) left top / 48px 1px no-repeat,
+
+    linear-gradient(
+      var(--panel-energy),
+      var(--panel-energy)
+    ) left top / 1px 48px no-repeat,
+
+    linear-gradient(
+      var(--panel-energy),
+      var(--panel-energy)
+    ) right bottom / 48px 1px no-repeat,
+
+    linear-gradient(
+      var(--panel-energy),
+      var(--panel-energy)
+    ) right bottom / 1px 48px no-repeat,
+
+    linear-gradient(
+      rgba(177, 139, 255, 0.06) 1px,
+      transparent 1px
+    ) 0 0 / 28px 28px,
+
+    linear-gradient(
+      90deg,
+      rgba(177, 139, 255, 0.06) 1px,
+      transparent 1px
+    ) 0 0 / 28px 28px;
+
+  opacity: 0.5;
+
+  transition: opacity 0.3s ease;
+}
+
+/* Reação ao cursor */
+.tech-panel:hover::after {
+  opacity: 0.9;
+}
+
+/* Movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .tech-panel::after {
+    transition: none;
+  }
+}

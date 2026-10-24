@@ -7,6 +7,8 @@ const selectedServices = ["programacao", "edicao-video"]
     const service = services.find((item) => item.slug === slug);
     return service ? [service] : [];
   });
+
+import SectionMarker from "../ui/SectionMarker.astro";
 ---
 
 <section
@@ -16,7 +18,10 @@ const selectedServices = ["programacao", "edicao-video"]
 >
   <div class="services-layout">
     <div class="services-intro">
-      <span class="section-eyebrow">ÁREAS DE ATUAÇÃO</span>
+        <SectionMarker
+    number="02"
+    label="ÁREAS DE ATUAÇÃO"
+    />
 
       <h2 id="services-title">
         Do planejamento à entrega.
@@ -31,7 +36,7 @@ const selectedServices = ["programacao", "edicao-video"]
 
     {selectedServices.map((service) => (
       <a
-        class="service-card"
+        class="service-card tech-panel"
         data-kind={service.slug}
         href={`/servicos/${service.slug}/`}
       >

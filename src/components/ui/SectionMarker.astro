@@ -1,0 +1,169 @@
+
+---
+interface Props {
+  number: string;
+  label: string;
+  tone?: "violet" | "warm";
+}
+
+const {
+  number,
+  label,
+  tone = "violet"
+} = Astro.props;
+---
+
+<div class="section-marker" data-tone={tone}>
+  <span class="section-marker__number">
+    {number}
+  </span>
+
+  <span
+    class="section-marker__star"
+    aria-hidden="true"
+  >
+    ✦
+  </span>
+
+  <span class="section-marker__label">
+    {label}
+  </span>
+
+  <span
+    class="section-marker__line"
+    aria-hidden="true"
+  ></span>
+
+  <span
+    class="section-marker__dot"
+    aria-hidden="true"
+  ></span>
+</div>
+
+<style>
+  /* Identidade do capítulo */
+  .section-marker {
+    --marker-color: #b18bff;
+
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 1.2rem;
+  }
+
+  .section-marker[data-tone="warm"] {
+    --marker-color: #ffb17a;
+  }
+
+  /* Número */
+  .section-marker__number {
+    position: relative;
+    flex-shrink: 0;
+
+    padding-left: 0.65rem;
+
+    color: var(--marker-color);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+
+    border-left: 2px solid var(--marker-color);
+  }
+
+  /* Estrela */
+  .section-marker__star {
+    flex-shrink: 0;
+
+    color: var(--marker-color);
+    font-size: 0.9rem;
+
+    filter: drop-shadow(
+      0 0 5px var(--marker-color)
+    );
+
+    animation:
+      marker-twinkle 3.5s
+      ease-in-out infinite alternate;
+  }
+
+  /* Nome da seção */
+  .section-marker__label {
+    color: var(--marker-color);
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+
+  /* Linha energética */
+  .section-marker__line {
+    flex: 1;
+    min-width: 12px;
+    height: 1px;
+
+    background: linear-gradient(
+      90deg,
+      var(--marker-color),
+      transparent
+    );
+
+    opacity: 0.55;
+  }
+
+  /* Ponto luminoso */
+  .section-marker__dot {
+    flex-shrink: 0;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+    background: var(--marker-color);
+
+    box-shadow:
+      0 0 9px var(--marker-color);
+  }
+
+  /* Cintilação */
+  @keyframes marker-twinkle {
+    from {
+      opacity: 0.5;
+      transform: scale(0.85);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+  }
+
+  /* Ajustes em telas pequenas */
+  @media (max-width: 480px) {
+    .section-marker {
+      gap: 0.4rem;
+    }
+
+    .section-marker__label {
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+    }
+
+    .section-marker__line,
+    .section-marker__dot {
+      display: none;
+    }
+  }
+
+  /* Acessibilidade */
+  @media (prefers-reduced-motion: reduce) {
+    .section-marker__star {
+      animation: none;
+    }
+  }
+</style>

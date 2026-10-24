@@ -32,6 +32,9 @@ const faqs = [
       "Entre em contato e conte um pouco sobre sua ideia. Podemos conversar sobre os objetivos, as possibilidades e os próximos passos."
   }
 ];
+
+import SectionMarker from "../ui/SectionMarker.astro";
+
 ---
 
 <section
@@ -42,9 +45,10 @@ const faqs = [
   <div class="faq-layout">
 
     <div class="faq-intro">
-      <span class="faq-eyebrow">
-        PERGUNTAS FREQUENTES
-      </span>
+        <SectionMarker
+        number="05"
+        label="PERGUNTAS FREQUENTES"
+        />
 
       <h2 id="faq-title">
         Antes de começarmos.
