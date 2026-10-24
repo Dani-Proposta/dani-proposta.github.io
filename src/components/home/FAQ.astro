@@ -1,0 +1,389 @@
+
+---
+const faqs = [
+  {
+    question: "Que tipos de projetos você atende?",
+    answer:
+      "Trabalho com desenvolvimento de software, APIs, automações e edição de vídeo. O escopo é definido conforme as necessidades de cada projeto."
+  },
+  {
+    question: "Como funciona o orçamento?",
+    answer:
+      "Conversamos sobre seus objetivos, requisitos, referências e prazo desejado. Com essas informações, podemos definir o escopo e avaliar os valores."
+  },
+  {
+    question: "Quanto tempo leva um projeto?",
+    answer:
+      "O prazo depende da complexidade, dos recursos necessários e do material disponível. Uma previsão pode ser alinhada antes do início do trabalho."
+  },
+  {
+    question: "Como acompanho o andamento?",
+    answer:
+      "Podemos combinar etapas, canais de comunicação e atualizações de progresso de acordo com as características do projeto."
+  },
+  {
+    question: "Posso solicitar alterações?",
+    answer:
+      "As revisões e os ajustes podem ser definidos no escopo inicial. Mudanças adicionais são avaliadas conforme a necessidade."
+  },
+  {
+    question: "Como começamos?",
+    answer:
+      "Entre em contato e conte um pouco sobre sua ideia. Podemos conversar sobre os objetivos, as possibilidades e os próximos passos."
+  }
+];
+---
+
+<section
+  class="faq-section"
+  id="faq"
+  aria-labelledby="faq-title"
+>
+  <div class="faq-layout">
+
+    <div class="faq-intro">
+      <span class="faq-eyebrow">
+        PERGUNTAS FREQUENTES
+      </span>
+
+      <h2 id="faq-title">
+        Antes de começarmos.
+      </h2>
+
+      <p>
+        Algumas respostas para facilitar
+        nosso primeiro contato e esclarecer
+        como podemos trabalhar juntos.
+      </p>
+
+      <a href="/#contato" class="faq-contact">
+        Ainda tem dúvidas?
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="faq-list">
+      {faqs.map((faq, index) => (
+        <details class="faq-item" name="portfolio-faq">
+          <summary class="faq-question">
+            <span class="faq-number">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+
+            <span class="faq-question__text">
+              {faq.question}
+            </span>
+
+            <span
+              class="faq-toggle"
+              aria-hidden="true"
+            ></span>
+          </summary>
+
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ======================================
+     ESTRUTURA
+  ====================================== */
+
+  .faq-section {
+    padding-block: 3rem 5rem;
+  }
+
+  .faq-layout {
+    display: grid;
+    grid-template-columns:
+      minmax(230px, 0.9fr)
+      minmax(0, 2fr);
+
+    align-items: start;
+    gap: 2rem;
+  }
+
+  /* ======================================
+     INTRODUÇÃO
+  ====================================== */
+
+  .faq-intro {
+    padding: 1.25rem 1rem 0 0;
+  }
+
+  .faq-eyebrow {
+    color: var(--color-accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+
+  .faq-intro h2 {
+    margin-block: 1rem;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    line-height: 1.2;
+  }
+
+  .faq-intro p {
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .faq-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+
+    color: var(--color-accent);
+    text-decoration: none;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .faq-contact:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* ======================================
+     LISTA DE PERGUNTAS
+  ====================================== */
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    min-width: 0;
+  }
+
+  .faq-item {
+    position: relative;
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    background:
+      linear-gradient(
+        115deg,
+        rgba(177, 139, 255, 0.045),
+        transparent 65%
+      ),
+      var(--color-surface);
+
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .faq-item:hover {
+    border-color: var(--color-border-highlight);
+  }
+
+  .faq-item[open] {
+    border-color: rgba(177, 139, 255, 0.65);
+
+    box-shadow:
+      var(--shadow-panel),
+      0 0 22px rgba(177, 139, 255, 0.08);
+  }
+
+  /* Detalhe luminoso */
+  .faq-item::before {
+    content: "";
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+
+    background: linear-gradient(
+      90deg,
+      var(--color-accent),
+      transparent
+    );
+
+    transition: width 0.3s ease;
+  }
+
+  .faq-item[open]::before {
+    width: 65%;
+  }
+
+  /* ======================================
+     PERGUNTA CLICÁVEL
+  ====================================== */
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 1.2rem 1.3rem;
+
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-number {
+    color: var(--color-accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .faq-question__text {
+    flex: 1;
+
+    color: var(--color-text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  /* ======================================
+     ÍCONE DE ABERTURA
+  ====================================== */
+
+  .faq-toggle {
+    position: relative;
+    flex: 0 0 28px;
+
+    width: 28px;
+    height: 28px;
+
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+
+    background: rgba(177, 139, 255, 0.05);
+  }
+
+  .faq-toggle::before,
+  .faq-toggle::after {
+    content: "";
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    background: var(--color-accent);
+    border-radius: 2px;
+
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-toggle::before {
+    width: 10px;
+    height: 2px;
+  }
+
+  .faq-toggle::after {
+    width: 2px;
+    height: 10px;
+  }
+
+  /* Quando abre, o + vira - */
+  .faq-item[open] .faq-toggle::after {
+    transform:
+      translate(-50%, -50%)
+      rotate(90deg);
+  }
+
+  /* ======================================
+     RESPOSTA
+  ====================================== */
+
+  .faq-answer {
+    margin-inline: 1.3rem;
+    padding: 0.3rem 2.3rem 1.3rem;
+
+    border-top: 1px solid
+      rgba(177, 139, 255, 0.13);
+  }
+
+  .faq-answer p {
+    margin: 0.8rem 0 0;
+
+    color: var(--color-muted);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  /* ======================================
+     RESPONSIVIDADE
+  ====================================== */
+
+  @media (max-width: 900px) {
+    .faq-layout {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .faq-intro {
+      max-width: 620px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .faq-question {
+      gap: 0.7rem;
+      padding: 1rem;
+    }
+
+    .faq-answer {
+      margin-inline: 1rem;
+      padding-inline: 0;
+    }
+
+    .faq-question__text {
+      font-size: 0.88rem;
+    }
+  }
+    @supports (interpolate-size: allow-keywords) and
+            selector(details::details-content) {
+
+    .faq-list {
+        interpolate-size: allow-keywords;
+    }
+
+    .faq-item::details-content {
+        height: 0;
+        opacity: 0;
+        overflow: clip;
+
+        transition:
+        height 360ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 260ms ease,
+        content-visibility 360ms allow-discrete;
+    }
+
+    .faq-item[open]::details-content {
+        height: auto;
+        opacity: 1;
+    }
+    }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-item,
+    .faq-item::before,
+    .faq-toggle::before,
+    .faq-toggle::after {
+      transition: none;
+    }
+    .faq-item::details-content {
+     transition: none;
+    }
+  }
+</style>
