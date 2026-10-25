@@ -1,4 +1,6 @@
 export const site = {
+    name: "Dani",
+    github: "https://github.com/Dani-Proposta",
     email: "dani.proposta@gmail.com",
   navigation: [
     

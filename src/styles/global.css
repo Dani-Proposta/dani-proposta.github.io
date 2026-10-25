@@ -57,9 +57,22 @@
   box-sizing: border-box;
 }
 
+
+
+/* C3 — Barra visualmente discreta sem alterar o layout */
 html {
   scroll-behavior: smooth;
+  scrollbar-width: none;
+  scrollbar-gutter: auto;
 }
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 
 body {
   display: flex;
