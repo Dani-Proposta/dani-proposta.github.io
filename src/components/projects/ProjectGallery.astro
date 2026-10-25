@@ -1,0 +1,516 @@
+
+---
+import PanelFrame from "../ui/PanelFrame.astro";
+
+interface GalleryImage {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  images: GalleryImage[];
+  projectTitle: string;
+}
+
+const { images, projectTitle } = Astro.props;
+---
+
+<section
+  class="project-gallery tech-panel"
+  data-project-gallery
+  aria-labelledby="project-gallery-title"
+>
+  <PanelFrame />
+
+  <div class="project-gallery__heading">
+    <div>
+      <span class="project-gallery__eyebrow">
+        ✦ REGISTROS VISUAIS
+      </span>
+
+      <h2 id="project-gallery-title">
+        Galeria de <span class="glow-word">imagens.</span>
+      </h2>
+    </div>
+
+    <span class="project-gallery__count">
+      {String(images.length).padStart(2, "0")} IMAGENS
+    </span>
+  </div>
+
+  <div class="project-gallery__grid">
+    {images.map((item, index) => (
+      <button
+        class="project-gallery__thumbnail"
+        type="button"
+        data-gallery-image
+        data-gallery-src={item.src}
+        data-gallery-alt={item.alt}
+        data-gallery-caption={item.caption ?? ""}
+        aria-label={`Ampliar imagem ${index + 1}: ${item.alt}`}
+      >
+        <img
+          src={item.src}
+          alt={item.alt}
+          loading="lazy"
+          decoding="async"
+        />
+
+        <span class="project-gallery__thumbnail-footer">
+          <span>
+            {String(index + 1).padStart(2, "0")}
+            / {String(images.length).padStart(2, "0")}
+          </span>
+
+          <span>AMPLIAR ↗</span>
+        </span>
+      </button>
+    ))}
+  </div>
+
+  <!-- Visualizador ampliado -->
+  <dialog
+    class="project-gallery__dialog"
+    data-gallery-dialog
+    aria-label={`Galeria de imagens de ${projectTitle}`}
+  >
+    <div class="project-gallery__dialog-top">
+      <span>VISUALIZADOR / PROJETO</span>
+
+      <button
+        type="button"
+        class="project-gallery__close"
+        data-gallery-close
+        aria-label="Fechar galeria"
+      >
+        ×
+      </button>
+    </div>
+
+    <div class="project-gallery__viewer">
+      <button
+        type="button"
+        class="project-gallery__nav"
+        data-gallery-prev
+        aria-label="Imagem anterior"
+        disabled={images.length < 2}
+      >
+        ‹
+      </button>
+
+      <figure>
+        <img
+          data-gallery-large
+          alt=""
+        />
+
+        <figcaption data-gallery-caption hidden></figcaption>
+      </figure>
+
+      <button
+        type="button"
+        class="project-gallery__nav"
+        data-gallery-next
+        aria-label="Próxima imagem"
+        disabled={images.length < 2}
+      >
+        ›
+      </button>
+    </div>
+
+    <div
+      class="project-gallery__counter"
+      data-gallery-counter
+      aria-live="polite"
+    ></div>
+  </dialog>
+</section>
+
+<style>
+  /* Painel da galeria */
+  .project-gallery {
+    position: relative;
+    isolation: isolate;
+
+    margin-top: 2.5rem;
+    padding: clamp(1.3rem, 3vw, 2.4rem);
+
+    border: 1px solid rgba(177, 139, 255, 0.4);
+    border-radius: 18px;
+
+    background: linear-gradient(
+      145deg,
+      rgba(20, 22, 42, 0.97),
+      rgba(11, 13, 29, 0.98)
+    );
+  }
+
+  .project-gallery__heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    margin-bottom: 1.7rem;
+  }
+
+  .project-gallery__eyebrow,
+  .project-gallery__count {
+    color: #c6a3fa;
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+  }
+
+  .project-gallery h2 {
+    margin: 0.7rem 0 0;
+
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  /* Miniaturas */
+  .project-gallery__grid {
+    display: grid;
+    grid-template-columns:
+      repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1rem;
+  }
+
+  .project-gallery__thumbnail {
+    position: relative;
+    overflow: hidden;
+
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+
+    padding: 0;
+
+    border: 1px solid rgba(177, 139, 255, 0.34);
+    border-radius: 11px;
+
+    background: #0b0d1c;
+    cursor: zoom-in;
+
+    transition:
+      transform 250ms ease,
+      border-color 250ms ease,
+      box-shadow 250ms ease;
+  }
+
+  .project-gallery__thumbnail:hover {
+    transform: translateY(-3px);
+    border-color: #c8a0ff;
+
+    box-shadow:
+      0 0 22px rgba(177, 139, 255, 0.3);
+  }
+
+  .project-gallery__thumbnail:focus-visible {
+    outline: 2px solid #dfc2ff;
+    outline-offset: 3px;
+  }
+
+  .project-gallery__thumbnail img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 400ms ease;
+  }
+
+  .project-gallery__thumbnail:hover img {
+    transform: scale(1.045);
+  }
+
+  /* Rodapé tecnológico da miniatura */
+  .project-gallery__thumbnail-footer {
+    position: absolute;
+    inset: auto 0 0;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+
+    padding: 1.5rem 0.8rem 0.7rem;
+
+    background: linear-gradient(
+      transparent,
+      rgba(5, 6, 16, 0.94)
+    );
+
+    color: #eee0ff;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  /* Visualizador em tela ampliada */
+  .project-gallery__dialog {
+    width: min(1100px, 95vw);
+    max-height: 92dvh;
+
+    padding: clamp(0.7rem, 2vw, 1.5rem);
+
+    border: 1px solid #8060af;
+    border-radius: 18px;
+
+    background: #0b0d1b;
+    color: #f7f5ff;
+
+    box-shadow:
+      0 0 50px rgba(177, 139, 255, 0.24);
+  }
+
+  .project-gallery__dialog::backdrop {
+    background: rgba(3, 4, 11, 0.88);
+    backdrop-filter: blur(8px);
+  }
+
+  .project-gallery__dialog-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    margin-bottom: 1rem;
+
+    color: #c6a3fa;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .project-gallery__close,
+  .project-gallery__nav {
+    display: grid;
+    place-items: center;
+
+    border: 1px solid rgba(177, 139, 255, 0.4);
+    border-radius: 9px;
+
+    background: #1b1730;
+    color: #e9d5ff;
+
+    cursor: pointer;
+  }
+
+  .project-gallery__close {
+    width: 38px;
+    height: 38px;
+    font-size: 1.7rem;
+  }
+
+  .project-gallery__viewer {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .project-gallery__nav {
+    width: 40px;
+    height: 48px;
+    font-size: 2rem;
+  }
+
+  .project-gallery__nav:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .project-gallery__nav:not(:disabled):hover,
+  .project-gallery__close:hover {
+    border-color: #d3b0ff;
+    background: #392454;
+  }
+
+  .project-gallery__viewer figure {
+    min-width: 0;
+    margin: 0;
+    text-align: center;
+  }
+
+  .project-gallery__viewer img {
+    display: block;
+
+    max-width: 100%;
+    max-height: 67dvh;
+    width: auto;
+    height: auto;
+
+    margin-inline: auto;
+
+    border: 1px solid rgba(177, 139, 255, 0.2);
+    border-radius: 8px;
+
+    object-fit: contain;
+  }
+
+  .project-gallery__viewer figcaption {
+    margin-top: 0.9rem;
+
+    color: #c7c2d8;
+    font-size: 0.85rem;
+  }
+
+  .project-gallery__counter {
+    margin-top: 1rem;
+
+    color: #c9a6ff;
+    font-size: 0.75rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Ajustes para celulares */
+  @media (max-width: 600px) {
+    .project-gallery__viewer {
+      grid-template-columns: 30px minmax(0, 1fr) 30px;
+      gap: 0.3rem;
+    }
+
+    .project-gallery__nav {
+      width: 30px;
+      height: 42px;
+    }
+
+    .project-gallery__viewer img {
+      max-height: 60dvh;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-gallery__thumbnail,
+    .project-gallery__thumbnail img {
+      transition: none;
+    }
+
+    .project-gallery__thumbnail:hover,
+    .project-gallery__thumbnail:hover img {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  /* Inicializa as galerias presentes na página */
+  function initProjectGalleries() {
+    const galleries = document.querySelectorAll<HTMLElement>(
+      "[data-project-gallery]"
+    );
+
+    galleries.forEach((gallery) => {
+      if (gallery.dataset.initialized === "true") return;
+
+      const dialog = gallery.querySelector<HTMLDialogElement>(
+        "[data-gallery-dialog]"
+      );
+
+      const image = gallery.querySelector<HTMLImageElement>(
+        "[data-gallery-large]"
+      );
+
+      const caption = gallery.querySelector<HTMLElement>(
+        "[data-gallery-caption]"
+      );
+
+      const counter = gallery.querySelector<HTMLElement>(
+        "[data-gallery-counter]"
+      );
+
+      const thumbnails = Array.from(
+        gallery.querySelectorAll<HTMLButtonElement>(
+          "[data-gallery-image]"
+        )
+      );
+
+      if (
+        !dialog ||
+        !image ||
+        !caption ||
+        !counter ||
+        thumbnails.length === 0
+      ) return;
+
+      gallery.dataset.initialized = "true";
+
+      let currentIndex = 0;
+
+      /* Atualiza a imagem ampliada */
+      function showImage(nextIndex: number) {
+        currentIndex =
+          (nextIndex + thumbnails.length) % thumbnails.length;
+
+        const selected = thumbnails[currentIndex];
+
+        image!.src = selected.dataset.gallerySrc ?? "";
+        image!.alt = selected.dataset.galleryAlt ?? "";
+
+        const text = selected.dataset.galleryCaption ?? "";
+
+        caption!.textContent = text;
+        caption!.hidden = text.length === 0;
+
+        counter!.textContent =
+          `${currentIndex + 1} / ${thumbnails.length}`;
+      }
+
+      /* Abre a miniatura selecionada */
+      thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener("click", () => {
+          showImage(index);
+          dialog!.showModal();
+        });
+      });
+
+      gallery.querySelector("[data-gallery-prev]")
+        ?.addEventListener("click", () => {
+          showImage(currentIndex - 1);
+        });
+
+      gallery.querySelector("[data-gallery-next]")
+        ?.addEventListener("click", () => {
+          showImage(currentIndex + 1);
+        });
+
+      gallery.querySelector("[data-gallery-close]")
+        ?.addEventListener("click", () => {
+          dialog!.close();
+        });
+
+      /* Permite navegar pelas setas do teclado */
+      dialog.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          showImage(currentIndex + 1);
+        }
+
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          showImage(currentIndex - 1);
+        }
+      });
+
+      /* Fecha ao clicar no fundo da janela */
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) {
+          dialog.close();
+        }
+      });
+    });
+  }
+
+  initProjectGalleries();
+
+  /* Compatibilidade com navegação do Astro */
+  document.addEventListener(
+    "astro:page-load",
+    initProjectGalleries
+  );
+</script>

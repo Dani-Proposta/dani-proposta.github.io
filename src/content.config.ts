@@ -32,6 +32,22 @@ const projects = defineCollection({
     repository: z.string().url().optional(),
 
     demo: z.string().url().optional(),
+
+    /* Capa opcional do projeto */
+    cover: z.string().optional(),
+
+    /* Descrição acessível da capa */
+    coverAlt: z.string().optional(),
+
+    /* Galeria opcional de imagens */
+    gallery: z.array(
+      z.object({
+        src: z.string(),
+        alt: z.string().min(1),
+        caption: z.string().optional()
+      })
+    ).default([]),
+
   }),
 });
 

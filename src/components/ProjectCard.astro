@@ -23,14 +23,14 @@ const extraTechnologies = Math.max(
   project.data.technologies.length - technologies.length
 );
 
-/* Capa opcional, preparada para o sistema de imagens */
-const coverValue =
-  "cover" in project.data ? project.data.cover : null;
 
-const cover =
-  typeof coverValue === "string" && coverValue.trim()
-    ? coverValue
-    : null;
+/* Capa personalizada */
+const cover = project.data.cover?.trim() || null;
+
+const coverAlt =
+  project.data.coverAlt?.trim() ||
+  `Prévia visual do projeto ${project.data.title}`;
+
 ---
 
 <a
@@ -48,7 +48,7 @@ const cover =
       <img
         class="project-card__image"
         src={cover}
-        alt={`Imagem do projeto ${project.data.title}`}
+        alt={coverAlt}
         loading="lazy"
         decoding="async"
       />
