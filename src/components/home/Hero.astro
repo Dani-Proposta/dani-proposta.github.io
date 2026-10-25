@@ -1,25 +1,19 @@
 ---
 import SectionMarker from "../ui/SectionMarker.astro";
 import CosmicButton from "../ui/CosmicButton.astro";
+import HeroOrnaments from "./HeroOrnaments.astro";
 ---
+
 <section class="cosmic-hero" id="inicio" aria-labelledby="hero-title">
-  <!-- Camada visual decorativa -->
-
-
-
-  <!-- Conteúdo profissional -->
   <div class="cosmic-hero__content">
     <SectionMarker
-    number="01"
-    label="PROGRAMAÇÃO · EDIÇÃO DE VÍDEO"
+      number="01"
+      label="PROGRAMAÇÃO · EDIÇÃO DE VÍDEO"
     />
 
-
     <h1 id="hero-title">
-    Bem vindo ao meu
-    <span class="glow-word"> Portfólio.</span>
+      Bem vindo ao meu{" "}<span class="glow-word">Portfólio.</span>
     </h1>
-
 
     <p class="cosmic-hero__description">
       Desenvolvimento de software, automações
@@ -27,23 +21,15 @@ import CosmicButton from "../ui/CosmicButton.astro";
       em soluções práticas.
     </p>
 
-
     <div class="hero-actions">
-      <CosmicButton
-        href="/#projetos"
-        variant="primary"
-      >
+      <CosmicButton href="/#projetos" variant="primary">
         Explorar projetos
       </CosmicButton>
 
-      <CosmicButton
-        href="/#contato"
-        variant="secondary"
-      >
+      <CosmicButton href="/#contato" variant="secondary">
         Entrar em contato
       </CosmicButton>
     </div>
-
 
     <div class="cosmic-hero__specialties">
       <span>Back-end e APIs</span>
@@ -51,37 +37,27 @@ import CosmicButton from "../ui/CosmicButton.astro";
       <span>Edição audiovisual</span>
     </div>
   </div>
+
+  <HeroOrnaments />
 </section>
 
-
 <style>
-  /* HERO — ESTRUTURA */
-
+  /* Hero: aparência original do desktop */
   .cosmic-hero {
     position: relative;
     isolation: isolate;
-    overflow: visible;
-
     display: flex;
     align-items: center;
-
     min-height: 570px;
     padding-block: 5rem;
   }
 
-  /* CONTEÚDO */
-
   .cosmic-hero__content {
     position: relative;
     z-index: 5;
+    width: 100%;
     max-width: 620px;
-  }
-
-  .cosmic-hero__eyebrow {
-    color: var(--color-accent);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
+    min-width: 0;
   }
 
   h1 {
@@ -89,16 +65,12 @@ import CosmicButton from "../ui/CosmicButton.astro";
     font-size: clamp(2.8rem, 5.5vw, 5rem);
     line-height: 1.08;
     letter-spacing: -0.045em;
+    text-wrap: balance;
   }
 
+  /* Preserva o gradiente aprovado para o título */
   h1 span {
-    background: linear-gradient(
-      100deg,
-      #d4bbff,
-      #9e80ff,
-      #7b9aff
-    );
-
+    background: linear-gradient(100deg, #d4bbff, #9e80ff, #7b9aff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -110,186 +82,111 @@ import CosmicButton from "../ui/CosmicButton.astro";
     line-height: 1.8;
   }
 
-  /* BOTÕES */
-
-  .cosmic-hero__actions {
+  /* Botões atuais: CosmicButton, não o antigo hero-button */
+  .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 2rem;
   }
 
-  .hero-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-
-    padding: 0.9rem 1.4rem;
-
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-
-    font-weight: 600;
-    text-decoration: none;
-
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-  }
-
-  .hero-button--primary {
-    color: #fff;
-
-    background: linear-gradient(
-      110deg,
-      #657cf9,
-      #a65bed
-    );
-
-    border-color: #a88cff;
-
-    box-shadow:
-      0 0 25px rgba(145, 95, 255, 0.24);
-  }
-
-  .hero-button--secondary {
-    color: var(--color-text);
-    background: rgba(15, 17, 35, 0.75);
-  }
-
-  .hero-button:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-glow);
-  }
-
-  /* ESPECIALIDADES */
-
   .cosmic-hero__specialties {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
-
     margin-top: 2.5rem;
-
     color: var(--color-muted);
     font-size: 0.8rem;
   }
 
-  /* ARTE */
-
-    .cosmic-hero__visual {
-    position: absolute;
-    z-index: 0;
-
-    width: min(96vw, 1320px);
-    aspect-ratio: 1952 / 806;
-
-    /* A imagem ultrapassa o container */
-    right: calc(50% - 59vw);
-    top: 50%;
-
-    transform: translateY(-50%);
-    pointer-events: none;
-
-    /* Mistura a arte com o fundo à esquerda */
-    -webkit-mask-image: linear-gradient(
-        to right,
-        transparent 0%,
-        rgba(0, 0, 0, 0.5) 21%,
-        black 44%
-    );
-
-    mask-image: linear-gradient(
-        to right,
-        transparent 0%,
-        rgba(0, 0, 0, 0.5) 21%,
-        black 44%
-    );
+  /* Tablets: evita a altura exagerada e o conteúdo espremido */
+  @media (max-width: 1024px) {
+    .cosmic-hero {
+      min-height: 530px;
+      padding-block: 4rem 4.5rem;
     }
 
-    
-
-    .cosmic-hero__image {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-
-    /* Iluminação adicional */
-    filter: drop-shadow(
-        0 0 34px rgba(172, 95, 255, 0.12)
-    );
-
-    /* Integração superior e inferior */
-    -webkit-mask-image: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(0, 0, 0, 0.25) 8%,
-        rgba(0, 0, 0, 0.75) 16%,
-        black 24%,
-        black 66%,
-        rgba(0, 0, 0, 0.88) 76%,
-        rgba(0, 0, 0, 0.48) 88%,
-        transparent 100%
-    );
-
-    mask-image: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(0, 0, 0, 0.25) 8%,
-        rgba(0, 0, 0, 0.75) 16%,
-        black 24%,
-        black 66%,
-        rgba(0, 0, 0, 0.88) 76%,
-        rgba(0, 0, 0, 0.48) 88%,
-        transparent 100%
-    );
+    .cosmic-hero__content {
+      max-width: min(620px, 100%);
     }
 
-  /* TELAS MENORES */
+    h1 {
+      font-size: clamp(2.75rem, 6.5vw, 4.4rem);
+    }
+  }
 
+  /* Tablet estreito: conteúdo no topo e respiro para a arte */
   @media (max-width: 760px) {
     .cosmic-hero {
-      min-height: 620px;
+      min-height: 550px;
       align-items: flex-start;
-      padding-block: 4rem;
-    }
-
-    .cosmic-hero__visual {
-    width: 165vw;
-
-    right: -35vw;
-    top: 65%;
-
-    opacity: 0.35;
+      padding-block: 3.25rem 5rem;
     }
 
     .cosmic-hero__content {
       max-width: 100%;
     }
 
+    h1 {
+      max-width: 14ch;
+      margin-block: 1.2rem;
+      font-size: clamp(2.35rem, 7.2vw, 3.45rem);
+      line-height: 1.06;
+    }
+
     .cosmic-hero__description {
-      max-width: 420px;
+      max-width: 34rem;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      gap: 0.75rem;
+      margin-top: 1.6rem;
     }
 
     .cosmic-hero__specialties {
-      gap: 0.8rem;
+      gap: 0.7rem 1rem;
+      margin-top: 1.8rem;
+      font-size: 0.75rem;
     }
   }
 
-  /* ACESSIBILIDADE */
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-button {
-      transition: none;
+  /* Celular: ações empilhadas e título legível */
+  @media (max-width: 520px) {
+    .cosmic-hero {
+      min-height: 590px;
+      padding-block: 2.75rem 4.75rem;
     }
 
-    .hero-button:hover {
-      transform: none;
+    h1 {
+      max-width: 13ch;
+      font-size: clamp(2.05rem, 9.5vw, 2.9rem);
+      line-height: 1.08;
+    }
+
+    .cosmic-hero__description {
+      max-width: 33ch;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+      width: min(100%, 320px);
+      gap: 0.75rem;
+    }
+
+    .hero-actions :global(.cosmic-btn) {
+      width: 100%;
+      min-height: 48px;
+    }
+
+    .cosmic-hero__specialties {
+      gap: 0.5rem 0.85rem;
+      margin-top: 1.65rem;
+      font-size: 0.72rem;
     }
   }
 </style>
-

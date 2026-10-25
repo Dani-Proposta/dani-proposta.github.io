@@ -1,23 +1,43 @@
 
+---
+import PanelFrame from "../ui/PanelFrame.astro";
+---
+
 <div class="hero-ornaments" aria-hidden="true">
 
+  <div class="hero-module tech-panel">
+    <PanelFrame />
 
-  <div class="hero-module">
-    <div class="hero-module__heading">
-      <span class="hero-module__star">✦</span>
-      <span>FLUXO CRIATIVO</span>
-    </div>
+    <div class="hero-module__inner">
 
-    <div class="hero-module__content">
-      <span>IDEIAS</span>
-      <span>ESTRUTURA</span>
-      <span>RESULTADOS</span>
-    </div>
+      <div class="hero-module__heading">
+        <span class="hero-module__star">✦</span>
+        <span>FLUXO CRIATIVO</span>
+      </div>
 
-    <div class="hero-module__footer">
-      <span class="hero-module__light"></span>
-      <span class="hero-module__line"></span>
-      <span class="hero-module__symbol">✧</span>
+      <div class="hero-module__content">
+        <div class="hero-module__step">
+          <span class="hero-module__number">01</span>
+          <span>IDEIAS</span>
+        </div>
+
+        <div class="hero-module__step">
+          <span class="hero-module__number">02</span>
+          <span>ESTRUTURA</span>
+        </div>
+
+        <div class="hero-module__step">
+          <span class="hero-module__number">03</span>
+          <span>RESULTADOS</span>
+        </div>
+      </div>
+
+      <div class="hero-module__footer">
+        <span class="hero-module__light"></span>
+        <span class="hero-module__line"></span>
+        <span class="hero-module__symbol">✧</span>
+      </div>
+
     </div>
   </div>
 
@@ -29,189 +49,153 @@
     position: absolute;
     inset: 0;
     z-index: 3;
+
     pointer-events: none;
   }
 
-  /* Régua lateral */
-  .hero-rail {
-    position: absolute;
-    top: 135px;
-    left: -2.6rem;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.7rem;
-  }
-
-  .hero-rail__number {
-    color: #c7a8ff;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-
-    text-shadow: 0 0 10px rgba(177, 139, 255, 0.4);
-  }
-
-  .hero-rail__track {
-    position: relative;
-
-    width: 1px;
-    height: 140px;
-
-    background: linear-gradient(
-      to bottom,
-      #b18bff,
-      #7954b1 45%,
-      rgba(177, 139, 255, 0.12)
-    );
-  }
-
-  .hero-rail__node {
-    position: absolute;
-    top: 42%;
-    left: 50%;
-
-    width: 11px;
-    height: 11px;
-
-    transform: translate(-50%, -50%);
-
-    border: 1px solid #d2aaff;
-    border-radius: 50%;
-
-    background: #100d21;
-
-    box-shadow:
-      0 0 10px rgba(177, 139, 255, 0.65),
-      0 0 20px rgba(177, 139, 255, 0.22);
-  }
-
-  .hero-rail__signals {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .hero-rail__signals span {
-    width: 3px;
-    height: 3px;
-
-    border-radius: 50%;
-    background: rgba(177, 139, 255, 0.4);
-  }
-
-  .hero-rail__signals span:first-child {
-    background: #c6a1ff;
-    box-shadow: 0 0 8px #b18bff;
-  }
-
-  /* Módulo lateral */
+  /* Módulo integrado ao universo */
   .hero-module {
+    --panel-energy: rgba(194, 155, 255, 0.76);
+
     position: absolute;
-    top: 190px;
-    right: 0;
 
-    width: 176px;
-    padding: 1.15rem;
 
-    border: 1px solid rgba(177, 139, 255, 0.48);
-    border-radius: 14px;
+    right: clamp(12px, 2.5vw, 42px);
+    bottom: 5rem;
+
+
+    width: 196px;
+    max-width: calc(100% - 24px);
+
+    padding: 1.35rem 1.25rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.38);
+    border-radius: 15px;
 
     background:
       linear-gradient(
         145deg,
-        rgba(177, 139, 255, 0.14),
-        transparent 68%
+        rgba(177, 139, 255, 0.075),
+        transparent 70%
       ),
-      rgba(10, 11, 27, 0.82);
+      rgba(10, 11, 27, 0.66);
 
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 
     box-shadow:
-      0 12px 36px rgba(0, 0, 0, 0.3),
-      0 0 26px rgba(177, 139, 255, 0.12);
+      0 12px 34px rgba(0, 0, 0, 0.22),
+      0 0 22px rgba(177, 139, 255, 0.1);
   }
 
-  .hero-module::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 15%;
-
-    width: 60%;
-    height: 1px;
-
-    background: linear-gradient(
-      90deg,
-      transparent,
-      #c4a1ff,
-      transparent
-    );
+  /* Conteúdo acima da decoração */
+  .hero-module__inner {
+    position: relative;
+    z-index: 2;
   }
 
-  .hero-module::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: 0;
-
-    width: 22px;
-    height: 22px;
-
-    border-right: 1px solid rgba(177, 139, 255, 0.7);
-    border-bottom: 1px solid rgba(177, 139, 255, 0.7);
-
-    border-bottom-right-radius: 14px;
-  }
-
+  /* Identificação */
   .hero-module__heading {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.55rem;
 
-    color: #c5aaff;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.11em;
+    color: #d1b3ff;
+
+    font-size: 0.61rem;
+    font-weight: 800;
+    letter-spacing: 0.105em;
+    white-space: nowrap;
+
+    text-shadow:
+      0 0 10px rgba(177, 139, 255, 0.36);
   }
 
   .hero-module__star {
-    color: #d6b5ff;
-    font-size: 0.85rem;
-    text-shadow: 0 0 10px #a66cff;
+    color: #e0c7ff;
+    font-size: 0.92rem;
+
+    text-shadow:
+      0 0 8px #a66cff,
+      0 0 18px rgba(177, 139, 255, 0.5);
   }
 
+  /* Etapas do fluxo criativo */
   .hero-module__content {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 0.65rem;
 
-    margin-top: 1.1rem;
+    margin-top: 1.2rem;
+  }
+
+  .hero-module__step {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
 
     color: #e8defa;
-    font-size: 0.73rem;
-    font-weight: 600;
+
+    font-size: 0.72rem;
+    font-weight: 650;
     letter-spacing: 0.09em;
   }
 
+  /* Identificadores tecnológicos */
+  .hero-module__number {
+    display: grid;
+    place-items: center;
+
+    width: 25px;
+    height: 22px;
+    flex-shrink: 0;
+
+    border: 1px solid rgba(177, 139, 255, 0.19);
+    border-radius: 5px;
+
+    background: rgba(177, 139, 255, 0.055);
+
+    color: #bb98ec;
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+  }
+
+  /* Resultado recebe um destaque suave */
+  .hero-module__step:last-child {
+    color: #f1e6ff;
+  }
+
+  .hero-module__step:last-child
+  .hero-module__number {
+    color: #ead5ff;
+
+    border-color: rgba(177, 139, 255, 0.42);
+
+    box-shadow:
+      0 0 9px rgba(177, 139, 255, 0.12);
+  }
+
+  /* Assinatura luminosa inferior */
   .hero-module__footer {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.65rem;
 
-    margin-top: 1rem;
+    margin-top: 1.2rem;
   }
 
   .hero-module__light {
     width: 5px;
     height: 5px;
+    flex-shrink: 0;
 
     border-radius: 50%;
-    background: #c29cff;
-    box-shadow: 0 0 10px #b18bff;
+    background: #c9a5ff;
+
+    box-shadow:
+      0 0 8px #b18bff,
+      0 0 16px rgba(177, 139, 255, 0.5);
   }
 
   .hero-module__line {
@@ -220,26 +204,31 @@
 
     background: linear-gradient(
       90deg,
-      #b18bff,
-      transparent
+      rgba(177, 139, 255, 0.85),
+      rgba(177, 139, 255, 0.05)
     );
   }
 
   .hero-module__symbol {
-    color: #caa7ff;
-    font-size: 0.8rem;
+    color: #d2b0ff;
+    font-size: 0.85rem;
+
+    text-shadow:
+      0 0 9px rgba(177, 139, 255, 0.45);
   }
 
-  /* Oculta os ornamentos em telas compactas */
-  @media (max-width: 1100px) {
+  /* Reduz efeitos nas telas menores */
+  @media (max-width: 1180px) {
     .hero-module {
       display: none;
     }
   }
 
-  @media (max-width: 860px) {
-    .hero-rail {
-      display: none;
+  /* Acessibilidade */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-module {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
   }
 </style>
