@@ -1,6 +1,6 @@
 ---
 import SectionMarker from "../ui/SectionMarker.astro";
-
+import CosmicButton from "../ui/CosmicButton.astro";
 ---
 <section class="cosmic-hero" id="inicio" aria-labelledby="hero-title">
   <!-- Camada visual decorativa -->
@@ -16,8 +16,8 @@ import SectionMarker from "../ui/SectionMarker.astro";
 
 
     <h1 id="hero-title">
-    Ideias bem feitas para um
-    <span class="glow-word"> mundo real.</span>
+    Bem vindo ao meu
+    <span class="glow-word"> Portfólio.</span>
     </h1>
 
 
@@ -27,16 +27,23 @@ import SectionMarker from "../ui/SectionMarker.astro";
       em soluções práticas.
     </p>
 
-    <div class="cosmic-hero__actions">
-      <a class="hero-button hero-button--primary" href="/projetos/">
-        Ver meus projetos
-        <span aria-hidden="true">↗</span>
-      </a>
 
-      <a class="hero-button hero-button--secondary" href="/#contato">
+    <div class="hero-actions">
+      <CosmicButton
+        href="/#projetos"
+        variant="primary"
+      >
+        Explorar projetos
+      </CosmicButton>
+
+      <CosmicButton
+        href="/#contato"
+        variant="secondary"
+      >
         Entrar em contato
-      </a>
+      </CosmicButton>
     </div>
+
 
     <div class="cosmic-hero__specialties">
       <span>Back-end e APIs</span>
