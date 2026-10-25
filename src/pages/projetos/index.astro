@@ -2,40 +2,740 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
+import PanelFrame from "../../components/ui/PanelFrame.astro";
 import { getCollection } from "astro:content";
 
-const projects = await getCollection("projects");
+/* Busca os projetos reais cadastrados */
+const projects = (await getCollection("projects")).sort(
+  (a, b) => {
+    const featuredDifference =
+      Number(Boolean(b.data.featured)) -
+      Number(Boolean(a.data.featured));
+
+    return (
+      featuredDifference ||
+      a.data.title.localeCompare(b.data.title, "pt-BR")
+    );
+  }
+);
+
+/* Nomes das áreas */
+const serviceLabels: Record<string, string> = {
+  programacao: "Programação",
+  "edicao-video": "Edição de vídeo"
+};
+
+/* Ordem preferencial dos filtros */
+const serviceOrder = ["programacao", "edicao-video"];
+
+const serviceIds = [
+  ...new Set(projects.map((project) => project.data.service))
+].sort((a, b) => {
+  const aOrder = serviceOrder.indexOf(a);
+  const bOrder = serviceOrder.indexOf(b);
+
+  return (
+    (aOrder === -1 ? 99 : aOrder) -
+    (bOrder === -1 ? 99 : bOrder)
+  );
+});
+
+/* Mostra apenas categorias com projetos */
+const filters = [
+  {
+    id: "all",
+    label: "Todos",
+    count: projects.length
+  },
+  ...serviceIds.map((id) => ({
+    id,
+    label: serviceLabels[id] ?? id,
+    count: projects.filter(
+      (project) => project.data.service === id
+    ).length
+  }))
+];
+
+const projectCountLabel =
+  projects.length === 1
+    ? "1 projeto encontrado"
+    : `${projects.length} projetos encontrados`;
 ---
 
 <BaseLayout title="Projetos | Dani">
-  <section class="projects-intro">
-    <span class="eyebrow">PORTFÓLIO</span>
+  <div class="projects-page" data-project-catalog>
 
-    <h1>Projetos e trabalhos</h1>
+    <!-- Introdução tecnológica -->
+    <header class="projects-intro tech-panel">
+      <PanelFrame />
 
-    <p>
-      Conheça os projetos desenvolvidos, as tecnologias
-      utilizadas e as soluções implementadas.
-    </p>
-  </section>
+      <div class="projects-intro__eyebrow">
+        <span class="projects-intro__signal"></span>
+        PORTFÓLIO / PROJETOS
+      </div>
 
-  <section class="projects-grid" aria-label="Projetos">
-    {projects.map((project) => (
-      <ProjectCard project={project} />
-    ))}
-  </section>
+      <div class="projects-intro__content">
+        <div class="projects-intro__copy">
+          <span class="projects-intro__index">
+            CATÁLOGO DE TRABALHOS
+          </span>
+
+          <h1>
+            Projetos e
+            <span class="glow-word"> trabalhos.</span>
+          </h1>
+
+          <p>
+            Conheça os projetos desenvolvidos, as tecnologias
+            utilizadas e as soluções implementadas.
+          </p>
+        </div>
+
+        <div
+          class="projects-intro__counter"
+          aria-label={`${projects.length} projetos cadastrados`}
+        >
+          <span>REGISTROS</span>
+
+          <strong>
+            {String(projects.length).padStart(2, "0")}
+          </strong>
+
+          <span>NO PORTFÓLIO</span>
+        </div>
+      </div>
+
+      <div class="projects-intro__footer">
+        <span class="projects-intro__line"></span>
+        <span>DESENVOLVIMENTO / AUDIOVISUAL</span>
+      </div>
+    </header>
+
+    <!-- Catálogo -->
+    <section
+      class="projects-catalog"
+      aria-labelledby="projects-catalog-title"
+    >
+      <div class="projects-catalog__heading">
+        <div>
+          <span class="projects-catalog__marker">
+            <span>01</span>
+            / EXPLORAR
+          </span>
+
+          <h2 id="projects-catalog-title">
+            Biblioteca de 
+            <span class="glow-word"> projetos.</span>
+          </h2>
+        </div>
+
+        <p>
+          Explore os trabalhos por especialidade e conheça
+          os detalhes de cada projeto.
+        </p>
+      </div>
+
+      {projects.length > 0 ? (
+        <>
+          <!-- Filtros por especialidade -->
+          <div class="projects-toolbar">
+            <div
+              class="projects-filters"
+              role="group"
+              aria-label="Filtrar projetos por especialidade"
+            >
+              {filters.map((filter) => (
+                <button
+                  type="button"
+                  class:list={[
+                    "projects-filter",
+                    { "is-active": filter.id === "all" }
+                  ]}
+                  data-filter={filter.id}
+                  aria-pressed={filter.id === "all"}
+                >
+                  <span>{filter.label}</span>
+
+                  <span class="projects-filter__count">
+                    {String(filter.count).padStart(2, "0")}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <p
+              class="projects-toolbar__results"
+              data-project-count
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {projectCountLabel}
+            </p>
+          </div>
+
+          <!-- Projetos da Content Collection -->
+          <div class="projects-grid">
+            {projects.map((project) => (
+              <div
+                class="projects-grid__item"
+                data-project-service={project.data.service}
+              >
+                <ProjectCard project={project} />
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div class="projects-empty tech-panel">
+          <PanelFrame />
+
+          <span class="projects-empty__symbol" aria-hidden="true">
+            ✧
+          </span>
+
+          <h3>Nenhum projeto cadastrado ainda.</h3>
+
+          <p>
+            Os trabalhos aparecerão aqui conforme
+            forem adicionados ao portfólio.
+          </p>
+        </div>
+      )}
+    </section>
+
+    <!-- Rodapé do catálogo -->
+    <div class="projects-bottom">
+      <span class="projects-bottom__line"></span>
+
+      <span>
+        FIM DO CATÁLOGO
+        <span aria-hidden="true">✦</span>
+      </span>
+
+      <span class="projects-bottom__line"></span>
+    </div>
+
+  </div>
 </BaseLayout>
 
 <style>
-  .projects-intro {
-    padding-block: 4rem 2rem;
+  /* Estrutura da página */
+  .projects-page {
+    width: min(1180px, 92%);
+    margin-inline: auto;
   }
 
+  /* Hero do catálogo */
+  .projects-intro {
+    position: relative;
+    isolation: isolate;
+
+    overflow: hidden;
+
+    margin-top: clamp(2.5rem, 6vw, 5rem);
+    padding: clamp(2rem, 5vw, 4rem);
+
+    border: 1px solid rgba(177, 139, 255, 0.45);
+    border-radius: 20px;
+
+    background:
+      radial-gradient(
+        ellipse at 88% 15%,
+        rgba(132, 69, 198, 0.2),
+        transparent 55%
+      ),
+      linear-gradient(
+        135deg,
+        rgba(22, 22, 43, 0.94),
+        rgba(11, 14, 29, 0.96)
+      );
+
+    box-shadow:
+      0 18px 55px rgba(0, 0, 0, 0.2),
+      0 0 28px rgba(177, 139, 255, 0.13);
+  }
+
+  .projects-intro__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    color: #c9adff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+
+  .projects-intro__signal {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+    background: #d0acff;
+
+    box-shadow:
+      0 0 8px #b18bff,
+      0 0 17px rgba(177, 139, 255, 0.55);
+  }
+
+  .projects-intro__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+
+    margin-top: 2.2rem;
+  }
+
+  .projects-intro__copy {
+    max-width: 750px;
+  }
+
+  .projects-intro__index {
+    color: #a9aed0;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+  }
+
+  .projects-intro h1 {
+    margin: 0.9rem 0 1.25rem;
+
+    font-size: clamp(2.5rem, 5vw, 4.7rem);
+    line-height: 1.1;
+  }
+
+  .projects-intro p {
+    max-width: 610px;
+    margin: 0;
+
+    color: #c3c6da;
+    font-size: clamp(0.98rem, 1.3vw, 1.1rem);
+    line-height: 1.8;
+  }
+
+  /* Indicador de quantidade */
+  .projects-intro__counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    min-width: 120px;
+
+    padding: 1.15rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.22);
+    border-radius: 12px;
+
+    background: rgba(177, 139, 255, 0.045);
+  }
+
+  .projects-intro__counter span {
+    color: #a9a6c9;
+    font-size: 0.61rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-align: center;
+  }
+
+  .projects-intro__counter strong {
+    margin: 0.35rem 0;
+
+    color: #e6d4ff;
+    font-size: 3.25rem;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+
+    text-shadow:
+      0 0 17px rgba(177, 139, 255, 0.48);
+  }
+
+  /* Assinatura inferior do Hero */
+  .projects-intro__footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    margin-top: 2.5rem;
+
+    color: #a9a4c1;
+    font-size: 0.63rem;
+    letter-spacing: 0.13em;
+  }
+
+  .projects-intro__line {
+    width: clamp(35px, 8vw, 110px);
+    height: 1px;
+
+    background: linear-gradient(
+      90deg,
+      #c9a6ff,
+      transparent
+    );
+
+    box-shadow:
+      0 0 10px rgba(177, 139, 255, 0.6);
+  }
+
+  /* Seção de projetos */
+  .projects-catalog {
+    padding-top: clamp(4rem, 7vw, 6rem);
+  }
+
+  .projects-catalog__heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 2rem;
+
+    margin-bottom: 2rem;
+  }
+
+  .projects-catalog__marker {
+    color: #b7a8d8;
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .projects-catalog__marker span {
+    margin-right: 0.5rem;
+
+    color: #d8b9ff;
+
+    text-shadow:
+      0 0 12px rgba(177, 139, 255, 0.5);
+  }
+
+  .projects-catalog h2 {
+    margin: 0.8rem 0 0;
+
+    font-size: clamp(1.9rem, 3vw, 3rem);
+    line-height: 1.2;
+  }
+
+  .projects-catalog__heading > p {
+    max-width: 350px;
+    margin: 0;
+
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* Barra de filtros */
+  .projects-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    margin-bottom: 2rem;
+    padding-block: 1rem;
+
+    border-top: 1px solid rgba(177, 139, 255, 0.15);
+    border-bottom: 1px solid rgba(177, 139, 255, 0.15);
+  }
+
+  .projects-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .projects-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    min-height: 42px;
+    padding: 0.65rem 0.95rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.25);
+    border-radius: 10px;
+
+    background: rgba(20, 18, 39, 0.9);
+
+    color: #c3bcd6;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      background 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      color 220ms ease,
+      transform 220ms ease;
+  }
+
+  .projects-filter__count {
+    color: #9e8bbb;
+    font-size: 0.66rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .projects-filter:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(177, 139, 255, 0.65);
+    color: #f5eeff;
+  }
+
+  .projects-filter.is-active {
+    border-color: #b18bff;
+
+    background: linear-gradient(
+      135deg,
+      rgba(92, 48, 153, 0.7),
+      rgba(42, 29, 82, 0.75)
+    );
+
+    color: #faf7ff;
+
+    box-shadow:
+      0 0 18px rgba(177, 139, 255, 0.19);
+  }
+
+  .projects-filter.is-active .projects-filter__count {
+    color: #e2cdff;
+  }
+
+  .projects-filter:focus-visible {
+    outline: 2px solid #d8b8ff;
+    outline-offset: 3px;
+  }
+
+  .projects-toolbar__results {
+    margin: 0;
+
+    color: #999cb8;
+    font-size: 0.76rem;
+  }
+
+  /* Grid original preservado */
   .projects-grid {
     display: grid;
+
     grid-template-columns:
       repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+
+    align-items: stretch;
     gap: 1.5rem;
-    padding-bottom: 5rem;
+
+    padding-bottom: 4rem;
+  }
+
+  .projects-grid__item {
+    min-width: 0;
+  }
+
+  .projects-grid__item[hidden] {
+    display: none !important;
+  }
+
+  /* Estado sem projetos */
+  .projects-empty {
+    position: relative;
+    isolation: isolate;
+
+    padding: 3.5rem 2rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.35);
+    border-radius: 16px;
+
+    background: rgba(17, 18, 38, 0.9);
+
+    text-align: center;
+  }
+
+  .projects-empty__symbol {
+    display: block;
+
+    color: #c9a6ff;
+    font-size: 2.5rem;
+
+    text-shadow:
+      0 0 20px rgba(177, 139, 255, 0.55);
+  }
+
+  .projects-empty h3 {
+    margin: 1rem 0;
+  }
+
+  .projects-empty p {
+    max-width: 440px;
+    margin-inline: auto;
+  }
+
+  /* Finalização da seção */
+  .projects-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+
+    margin-bottom: 5rem;
+  }
+
+  .projects-bottom__line {
+    width: min(130px, 20%);
+    height: 1px;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(177, 139, 255, 0.3),
+      transparent
+    );
+  }
+
+  .projects-bottom > span:nth-child(2) {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+
+    color: #aaa1c2;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .projects-bottom > span:nth-child(2) span {
+    color: #c6a0ff;
+  }
+
+  /* Adaptação para tablets */
+  @media (max-width: 800px) {
+    .projects-intro__content {
+      align-items: flex-start;
+    }
+
+    .projects-intro__counter {
+      min-width: 90px;
+    }
+
+    .projects-intro__counter strong {
+      font-size: 2.5rem;
+    }
+
+    .projects-catalog__heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+
+  /* Adaptação para celulares */
+  @media (max-width: 600px) {
+    .projects-intro {
+      padding: 2rem 1.4rem;
+    }
+
+    .projects-intro__content {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .projects-intro__counter {
+      flex-direction: row;
+      justify-content: center;
+      gap: 0.75rem;
+
+      width: 100%;
+    }
+
+    .projects-intro__counter strong {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .projects-intro__footer {
+      margin-top: 2rem;
+    }
+
+    .projects-filters {
+      width: 100%;
+    }
+
+    .projects-filter {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .projects-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Acessibilidade */
+  @media (prefers-reduced-motion: reduce) {
+    .projects-filter {
+      transition: none;
+    }
+
+    .projects-filter:hover {
+      transform: none;
+    }
   }
 </style>
+
+<script>
+  /* Filtragem sem recarregar a página */
+  const catalog = document.querySelector<HTMLElement>(
+    "[data-project-catalog]"
+  );
+
+  if (catalog) {
+    const buttons = Array.from(
+      catalog.querySelectorAll<HTMLButtonElement>(
+        "[data-filter]"
+      )
+    );
+
+    const cards = Array.from(
+      catalog.querySelectorAll<HTMLElement>(
+        "[data-project-service]"
+      )
+    );
+
+    const results = catalog.querySelector<HTMLElement>(
+      "[data-project-count]"
+    );
+
+    function applyFilter(filter: string) {
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const matches =
+          filter === "all" ||
+          card.dataset.projectService === filter;
+
+        card.hidden = !matches;
+
+        if (matches) visibleCount++;
+      });
+
+      buttons.forEach((button) => {
+        const active = button.dataset.filter === filter;
+
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+
+      if (results) {
+        results.textContent =
+          visibleCount === 1
+            ? "1 projeto encontrado"
+            : `${visibleCount} projetos encontrados`;
+      }
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        applyFilter(button.dataset.filter ?? "all");
+      });
+    });
+  }
+</script>

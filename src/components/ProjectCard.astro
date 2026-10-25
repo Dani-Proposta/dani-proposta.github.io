@@ -2,6 +2,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { services } from "../data/services";
+import PanelFrame from "./ui/PanelFrame.astro";
 
 interface Props {
   project: CollectionEntry<"projects">;
@@ -12,59 +13,518 @@ const { project } = Astro.props;
 const service = services.find(
   (item) => item.slug === project.data.service
 );
+
+const isVideo = project.data.service === "edicao-video";
+const isFeatured = Boolean(project.data.featured);
+
+const technologies = project.data.technologies.slice(0, 4);
+const extraTechnologies = Math.max(
+  0,
+  project.data.technologies.length - technologies.length
+);
+
+/* Capa opcional, preparada para o sistema de imagens */
+const coverValue =
+  "cover" in project.data ? project.data.cover : null;
+
+const cover =
+  typeof coverValue === "string" && coverValue.trim()
+    ? coverValue
+    : null;
 ---
 
-<article class="project-card">
-  <p class="category">{service?.title ?? "Projeto"}</p>
+<a
+  class="project-card tech-panel"
+  data-kind={project.data.service}
+  href={`/projetos/${project.id}/`}
+  aria-label={`Ver detalhes do projeto ${project.data.title}`}
+>
+  <PanelFrame />
 
-  <h2>{project.data.title}</h2>
+  <!-- Apresentação visual -->
+  <div class="project-card__media">
 
-  <p>{project.data.summary}</p>
+    {cover ? (
+      <img
+        class="project-card__image"
+        src={cover}
+        alt={`Imagem do projeto ${project.data.title}`}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <div class="project-card__placeholder" aria-hidden="true">
+        <span class="project-card__orbit project-card__orbit--outer"></span>
+        <span class="project-card__orbit project-card__orbit--inner"></span>
 
-  <div class="technologies">
-    {project.data.technologies.map((technology) => (
-      <span>{technology}</span>
-    ))}
+        <span class="project-card__symbol">
+          {isVideo ? "▶" : "</>"}
+        </span>
+
+        <span class="project-card__visual-title">
+          {project.data.title}
+        </span>
+      </div>
+    )}
+
+    <div class="project-card__media-top" aria-hidden="true">
+      <span>REGISTRO / {isVideo ? "MOTION" : "CODE"}</span>
+      <span class="project-card__signal"></span>
+    </div>
+
+    <span class="project-card__media-line" aria-hidden="true"></span>
   </div>
 
-  <a href={`/projetos/${project.id}/`}>
-    Ver projeto completo →
-  </a>
-</article>
+  <!-- Informações reais do projeto -->
+  <div class="project-card__body">
+    <div class="project-card__meta">
+      <span class="project-card__category">
+        {service?.title ?? "Projeto"}
+      </span>
+
+      {isFeatured && (
+        <span class="project-card__featured">
+          ✦ DESTAQUE
+        </span>
+      )}
+    </div>
+
+    <h3>{project.data.title}</h3>
+
+    <p class="project-card__summary">
+      {project.data.summary}
+    </p>
+
+    <div
+      class="project-card__technologies"
+      aria-label="Tecnologias utilizadas"
+    >
+      {technologies.map((technology) => (
+        <span>{technology}</span>
+      ))}
+
+      {extraTechnologies > 0 && (
+        <span class="project-card__more">
+          +{extraTechnologies}
+        </span>
+      )}
+    </div>
+
+    <div class="project-card__footer">
+      <span>Explorar projeto</span>
+
+      <svg
+        width="19"
+        height="19"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M7 17 17 7" />
+        <path d="M8 7h9v9" />
+      </svg>
+    </div>
+  </div>
+</a>
 
 <style>
+  /* Estrutura do card */
   .project-card {
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+    height: 100%;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(177, 139, 255, 0.43);
+    border-radius: 17px;
+
+    background: linear-gradient(
+      160deg,
+      rgba(21, 25, 45, 0.97),
+      rgba(12, 14, 29, 0.98)
+    );
+
+    color: var(--color-text);
+    text-decoration: none;
+
+    transition:
+      transform 280ms ease,
+      border-color 280ms ease,
+      box-shadow 280ms ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .project-card:focus-visible {
+    outline: 2px solid #dec6ff;
+    outline-offset: 4px;
+  }
+
+  /* Área de apresentação */
+  .project-card__media {
+    position: relative;
+    isolation: isolate;
+
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+
+    border-bottom: 1px solid rgba(177, 139, 255, 0.22);
+
+    background:
+      radial-gradient(
+        ellipse at 50% 55%,
+        rgba(116, 67, 198, 0.34),
+        transparent 60%
+      ),
+      linear-gradient(
+        145deg,
+        #181330,
+        #0a1020
+      );
+  }
+
+  .project-card[data-kind="edicao-video"] .project-card__media {
+    background:
+      radial-gradient(
+        ellipse at 55% 55%,
+        rgba(211, 110, 95, 0.24),
+        transparent 60%
+      ),
+      linear-gradient(
+        145deg,
+        #291827,
+        #0a1020
+      );
+  }
+
+  /* Imagem real quando disponível */
+  .project-card__image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition:
+      transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .project-card:hover .project-card__image {
+    transform: scale(1.055);
+  }
+
+  /* Ilustração temporária sem imagem */
+  .project-card__placeholder {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+
+    padding: 2rem;
+
+    background-image:
+      linear-gradient(
+        rgba(177, 139, 255, 0.055) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgba(177, 139, 255, 0.055) 1px,
+        transparent 1px
+      );
+
+    background-size: 26px 26px;
+  }
+
+  /* Órbitas decorativas */
+  .project-card__orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    border: 1px solid rgba(177, 139, 255, 0.15);
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .project-card__orbit--outer {
+    width: 230px;
+    height: 230px;
+  }
+
+  .project-card__orbit--inner {
+    width: 150px;
+    height: 150px;
+
+    border-color: rgba(177, 139, 255, 0.24);
+
+    box-shadow:
+      0 0 30px rgba(177, 139, 255, 0.09);
+  }
+
+  /* Símbolo central */
+  .project-card__symbol {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 62px;
+    height: 62px;
+
+    border: 1px solid rgba(190, 152, 255, 0.56);
+    border-radius: 17px;
+
+    background: rgba(29, 21, 57, 0.85);
+
+    color: #ddc1ff;
+    font-family: monospace;
+    font-size: 1.45rem;
+    font-weight: 800;
+
+    box-shadow:
+      0 0 24px rgba(177, 139, 255, 0.2);
+
+    transition:
+      transform 300ms ease,
+      box-shadow 300ms ease;
+  }
+
+  .project-card:hover .project-card__symbol {
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 0 33px rgba(177, 139, 255, 0.43);
+  }
+
+  .project-card__visual-title {
+    position: relative;
+    z-index: 1;
+
+    max-width: 85%;
+
+    color: #eee3ff;
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-align: center;
+
+    text-shadow:
+      0 0 16px rgba(177, 139, 255, 0.4);
+  }
+
+  /* Identificação visual */
+  .project-card__media-top {
+    position: absolute;
+    z-index: 2;
+
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    color: #d7c2f4;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+
+    text-shadow: 0 1px 6px #090b18;
+  }
+
+  .project-card__signal {
+    width: 5px;
+    height: 5px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+    background: #d9bcff;
+
+    box-shadow:
+      0 0 9px #b18bff,
+      0 0 18px rgba(177, 139, 255, 0.65);
+  }
+
+  .project-card__media-line {
+    position: absolute;
+    bottom: 0;
+    left: 12%;
+
+    width: 42%;
+    height: 2px;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      #c49dff,
+      transparent
+    );
+
+    box-shadow:
+      0 0 12px rgba(177, 139, 255, 0.75);
+  }
+
+  /* Conteúdo textual */
+  .project-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    min-width: 0;
     padding: 1.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    background: var(--color-surface);
   }
 
-  .category {
-    color: var(--color-accent);
-    font-size: 0.85rem;
+  .project-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem;
   }
 
-  h2 {
-    margin-block: 1rem;
+  .project-card__category {
+    color: #c9adff;
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
   }
 
-  .technologies {
+  .project-card__featured {
+    color: #e6cfff;
+    font-size: 0.59rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+
+    text-shadow:
+      0 0 11px rgba(177, 139, 255, 0.55);
+  }
+
+  .project-card h3 {
+    margin: 1rem 0 0.65rem;
+
+    color: #f8f5ff;
+    font-size: clamp(1.2rem, 1.5vw, 1.45rem);
+    line-height: 1.3;
+  }
+
+  .project-card__summary {
+    flex: 1;
+
+    margin: 0;
+
+    color: #bfc2d6;
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  /* Tecnologias */
+  .project-card__technologies {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-block: 1.5rem;
+    gap: 0.45rem;
+
+    margin-top: 1.4rem;
   }
 
-  .technologies span {
-    padding: 0.35rem 0.65rem;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    font-size: 0.8rem;
+  .project-card__technologies span {
+    padding: 0.35rem 0.6rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.26);
+    border-radius: 7px;
+
+    background: rgba(177, 139, 255, 0.055);
+
+    color: #ddd2f2;
+    font-size: 0.68rem;
   }
 
-  a {
-    color: var(--color-accent);
-    font-weight: 600;
+  .project-card__technologies .project-card__more {
+    color: #cab0ef;
+  }
+
+  /* Ação inferior */
+  .project-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+
+    border-top: 1px solid rgba(177, 139, 255, 0.18);
+
+    color: #dfc7ff;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .project-card__footer svg {
+    flex-shrink: 0;
+
+    transition: transform 260ms ease;
+  }
+
+  .project-card:hover .project-card__footer svg {
+    transform: translate(3px, -3px);
+  }
+
+  /* Responsividade */
+  @media (max-width: 600px) {
+    .project-card__body {
+      padding: 1.2rem;
+    }
+
+    .project-card__orbit--outer {
+      width: 180px;
+      height: 180px;
+    }
+
+    .project-card__orbit--inner {
+      width: 120px;
+      height: 120px;
+    }
+  }
+
+  /* Movimento reduzido */
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .project-card__image,
+    .project-card__symbol,
+    .project-card__footer svg {
+      transition: none;
+    }
+
+    .project-card:hover,
+    .project-card:hover .project-card__image,
+    .project-card:hover .project-card__symbol,
+    .project-card:hover .project-card__footer svg {
+      transform: none;
+    }
   }
 </style>
