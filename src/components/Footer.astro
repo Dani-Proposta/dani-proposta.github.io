@@ -1,61 +1,212 @@
+
 ---
 import { site } from "../config/site";
 
 const year = new Date().getFullYear();
+
+/* Evita informações vazias no rodapé */
+const siteName = site.name?.trim() || "Dani";
+const githubUrl =
+  site.github?.trim() || "https://github.com/Dani-Proposta";
+const email = site.email?.trim() || "";
 ---
 
 <footer class="site-footer">
-  <div class="container footer-content">
-    <p>
-      © {year} Portfólio da {site.name}.
-    </p>
+  <div class="container site-footer__inner">
+    <div class="site-footer__identity">
+      <span class="site-footer__symbol" aria-hidden="true">
+        ✦
+      </span>
 
-    <div class="footer-links">
+      <p>
+        © {year} Portfólio da <strong>{siteName}</strong>.
+      </p>
+    </div>
+
+    <nav class="site-footer__links" aria-label="Links do rodapé">
       <a
-        href={site.github}
+        href={githubUrl}
         target="_blank"
         rel="noopener noreferrer"
       >
+        <span class="site-footer__dot" aria-hidden="true"></span>
         GitHub
       </a>
 
-      <a href={`mailto:${site.email}`}>
-        E-mail profissional
-      </a>
-    </div>
+      {email && (
+        <a href={`mailto:${email}`}>
+          <span class="site-footer__dot" aria-hidden="true"></span>
+          E-mail profissional
+        </a>
+      )}
+    </nav>
   </div>
 </footer>
 
 <style>
+  /* Estrutura do rodapé */
   .site-footer {
-    border-top: 1px solid var(--color-border);
-    padding-block: 2rem;
+    position: relative;
+    margin-top: auto;
+    padding-block: 1.5rem;
+
+    border-top: 1px solid rgba(177, 139, 255, 0.22);
+
+    background: linear-gradient(
+      180deg,
+      rgba(13, 12, 29, 0.72),
+      rgba(8, 11, 22, 0.92)
+    );
   }
 
-  .footer-content {
+  /* Linha de energia superior */
+  .site-footer::before {
+    content: "";
+    position: absolute;
+
+    top: -1px;
+    left: 50%;
+
+    width: min(260px, 45%);
+    height: 1px;
+
+    transform: translateX(-50%);
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      #cba5ff,
+      transparent
+    );
+
+    box-shadow: 0 0 12px rgba(177, 139, 255, 0.65);
+
+    pointer-events: none;
+  }
+
+  /* Conteúdo alinhado ao restante do site */
+  .site-footer__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1rem 2rem;
   }
 
-  .footer-content p {
-    margin: 0;
-  }
-
-  .footer-links {
+  /* Identidade */
+  .site-footer__identity {
     display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+  }
+
+  .site-footer__symbol {
+    color: #cba5ff;
+    font-size: 1rem;
+
+    text-shadow:
+      0 0 10px rgba(177, 139, 255, 0.75);
+  }
+
+  .site-footer__identity p {
+    margin: 0;
+
+    color: #bcbdd1;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .site-footer__identity strong {
+    color: #eee3ff;
+    font-weight: 700;
+  }
+
+  /* Links tecnológicos */
+  .site-footer__links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 0.65rem;
   }
 
-  .footer-links a {
-    color: var(--color-accent);
+  .site-footer__links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+
+    min-height: 38px;
+    padding: 0.55rem 0.9rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.23);
+    border-radius: 999px;
+
+    background: rgba(23, 20, 43, 0.55);
+
+    color: #d8c4f7;
+    font-size: 0.79rem;
+    font-weight: 600;
     text-decoration: none;
+
+    transition:
+      transform 220ms ease,
+      border-color 220ms ease,
+      background 220ms ease,
+      box-shadow 220ms ease,
+      color 220ms ease;
   }
 
-  .footer-links a:hover {
-    text-decoration: underline;
+  /* Pequenos indicadores de energia */
+  .site-footer__dot {
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+    background: #c69fff;
+
+    box-shadow: 0 0 8px rgba(177, 139, 255, 0.85);
+  }
+
+  .site-footer__links a:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(213, 176, 255, 0.72);
+    background: rgba(59, 34, 97, 0.48);
+
+    color: #fff;
+
+    box-shadow:
+      0 0 18px rgba(177, 139, 255, 0.2);
+  }
+
+  .site-footer__links a:focus-visible {
+    outline: 2px solid #dec6ff;
+    outline-offset: 3px;
+  }
+
+  /* Layout compacto para celular */
+  @media (max-width: 640px) {
+    .site-footer__inner {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .site-footer__links {
+      justify-content: center;
+    }
+  }
+
+  /* Acessibilidade */
+  @media (prefers-reduced-motion: reduce) {
+    .site-footer__links a {
+      transition: none;
+    }
+
+    .site-footer__links a:hover {
+      transform: none;
+    }
   }
 </style>

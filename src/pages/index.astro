@@ -1,24 +1,19 @@
 
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ServiceCard from "../components/ServiceCard.astro";
-import { services } from "../data/services";
-import { site } from "../config/site";
-import Hero from "../components/home/Hero.astro";
+
+import OrbitalNavigation from "../components/home/OrbitalNavigation.astro";
+import CosmicScene from "../components/home/CosmicScene.astro";
+
 import StackSection from "../components/home/StackSection.astro";
-import ServicesSection from "../components/home/ServicesSection.astro";
 import FeaturedProjects from "../components/home/FeaturedProjects.astro";
 import FAQ from "../components/home/FAQ.astro";
 import ContactSection from "../components/home/ContactSection.astro";
-import CosmicScene from "../components/home/CosmicScene.astro";
-import OrbitalNavigation from "../components/home/OrbitalNavigation.astro";
-
 ---
 
 <BaseLayout title="Dani | Portfólio">
-  
   <OrbitalNavigation />
-  
+
   <CosmicScene />
 
   <StackSection />
@@ -26,34 +21,6 @@ import OrbitalNavigation from "../components/home/OrbitalNavigation.astro";
   <FeaturedProjects />
 
   <FAQ />
-  
+
   <ContactSection />
-
-<section class="contact" id="contato">
-  <h2>Vamos conversar sobre seu projeto?</h2>
-
-  <p>
-    Desenvolvimento de software, automações e edição
-    de vídeo para necessidades reais.
-  </p>
-
-  <a href={`mailto:${site.email}`}>
-    Entrar em contato →
-  </a>
-</section>
 </BaseLayout>
-
-<style>
-  .service-grid {
-    display: grid;
-    grid-template-columns:
-      repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  #servicos,
-  .contact {
-    padding-block: 3rem;
-  }
-</style>
