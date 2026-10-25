@@ -1,47 +1,55 @@
-
 :root {
   /* Identidade cromática */
   --color-background: #080b16;
   --color-surface: #111728;
   --color-surface-raised: #191e32;
-
   --color-text: #f7f5ff;
-  --color-muted: #b9bdd4;
-
+  --color-muted: #c5c8db;
   --color-accent: #b18bff;
   --color-accent-hover: #cfb2ff;
   --color-accent-blue: #79a6ff;
   --color-accent-warm: #ffb17a;
-
   --color-border: #343b56;
   --color-border-highlight: #7663b0;
-
   /* Dimensões */
   --content-width: 1180px;
-
   /* Bordas arredondadas */
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
-
   /* Espaçamento */
   --space-xs: 0.5rem;
   --space-sm: 1rem;
   --space-md: 1.5rem;
   --space-lg: 2rem;
   --space-xl: 4rem;
-
   /* Sombras */
   --shadow-panel:
     0 16px 40px rgba(0, 0, 0, 0.24);
-
   --shadow-glow:
     0 0 24px rgba(177, 139, 255, 0.14);
-
   font-family: system-ui, sans-serif;
   color: var(--color-text);
   background: var(--color-background);
   color-scheme: dark;
+  /* Cosmic Interface 2.0 */
+  --cosmic-deep: #080b16;
+  --cosmic-surface: #111728;
+  --cosmic-violet: #b18bff;
+  --cosmic-blue: #79a6ff;
+  --cosmic-warm: #ffb17a;
+  --tech-grid: rgba(177, 139, 255, 0.055);
+  --tech-border: rgba(177, 139, 255, 0.35);
+  --tech-border-active: rgba(202, 168, 255, 0.75);
+  --tech-glow:
+    0 0 22px rgba(177, 139, 255, 0.14);
+  --tech-glow-strong:
+    0 0 32px rgba(177, 139, 255, 0.28);
+  /* Tipografia luminosa */
+  --text-strong: #f9f8ff;
+  --text-violet: #dec6ff;
+  --text-blue: #a9c9ff;
+  --text-warm: #ffd1ad;
 }
 
 /* Normalização básica */
@@ -58,35 +66,25 @@ body {
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
-
-  
+  position: relative;
+  isolation: isolate;
   background:
     radial-gradient(
-      circle at 21% 28%,
-      rgba(238, 207, 255, 0.65) 0 1px,
-      transparent 2px
-    ) 0 0 / 237px 211px,
-
-    radial-gradient(
-      circle at 74% 66%,
-      rgba(141, 160, 255, 0.5) 0 1px,
-      transparent 2px
-    ) 0 0 / 317px 269px,
-
-    radial-gradient(
-      ellipse at 78% 5%,
-      rgba(107, 67, 198, 0.16),
-      transparent 42%
+      ellipse at 78% 8%,
+      rgba(110, 54, 191, 0.18),
+      transparent 43%
     ),
-
     radial-gradient(
-      ellipse at 5% 35%,
-      rgba(61, 88, 166, 0.10),
-      transparent 42%
+      ellipse at 8% 47%,
+      rgba(64, 74, 158, 0.12),
+      transparent 46%
     ),
-
-    var(--color-background);
-
+    radial-gradient(
+      ellipse at 80% 86%,
+      rgba(111, 46, 139, 0.07),
+      transparent 48%
+    ),
+    var(--cosmic-deep);
 }
 
 /* Estrutura compartilhada */
@@ -146,14 +144,10 @@ a {
 .chip {
   display: inline-flex;
   align-items: center;
-
   padding: 0.35rem 0.7rem;
-
   border: 1px solid var(--color-border);
   border-radius: 999px;
-
   background: rgba(255, 255, 255, 0.025);
-
   color: var(--color-muted);
   font-size: 0.8rem;
   line-height: 1.4;
@@ -176,193 +170,11 @@ html {
 }
 
 
-/* Cosmic Interface 2.0 — Tokens */
-:root {
-  --cosmic-deep: #080b16;
-  --cosmic-surface: #111728;
-
-  --cosmic-violet: #b18bff;
-  --cosmic-blue: #79a6ff;
-  --cosmic-warm: #ffb17a;
-
-  --tech-grid: rgba(177, 139, 255, 0.055);
-  --tech-border: rgba(177, 139, 255, 0.35);
-  --tech-border-active: rgba(202, 168, 255, 0.75);
-
-  --tech-glow:
-    0 0 22px rgba(177, 139, 255, 0.14);
-
-  --tech-glow-strong:
-    0 0 32px rgba(177, 139, 255, 0.28);
-}
-
-/* Atmosfera cósmica */
-body {
-  position: relative;
-  isolation: isolate;
-
-  background:
-    radial-gradient(
-      ellipse at 78% 8%,
-      rgba(110, 54, 191, 0.18),
-      transparent 43%
-    ),
-    radial-gradient(
-      ellipse at 8% 47%,
-      rgba(64, 74, 158, 0.12),
-      transparent 46%
-    ),
-    radial-gradient(
-      ellipse at 80% 86%,
-      rgba(111, 46, 139, 0.07),
-      transparent 48%
-    ),
-    var(--cosmic-deep);
-}
-
-/* Camadas de estrelas */
-
-/* Camadas de estrelas */
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  inset: -55px;
-  z-index: -1;
-
-  pointer-events: none;
-  background-repeat: repeat;
-
-  will-change: transform, opacity;
-}
-
-/* Estrelas distantes */
-body::before {
-  background-image:
-    radial-gradient(
-      circle at 14% 27%,
-      rgba(236, 220, 255, 0.9) 0 1px,
-      transparent 2px
-    ),
-    radial-gradient(
-      circle at 71% 58%,
-      rgba(151, 177, 255, 0.85) 0 1px,
-      transparent 2px
-    ),
-    radial-gradient(
-      circle at 39% 81%,
-      rgba(255, 255, 255, 0.8) 0 0.8px,
-      transparent 1.8px
-    ),
-    radial-gradient(
-      circle at 84% 12%,
-      rgba(188, 148, 255, 0.85) 0 0.9px,
-      transparent 2px
-    ),
-    radial-gradient(
-      circle at 53% 39%,
-      rgba(190, 190, 255, 0.9) 0 0.8px,
-      transparent 2px
-    ),
-    radial-gradient(
-      circle at 26% 62%,
-      rgba(226, 192, 255, 0.8) 0 0.8px,
-      transparent 2px
-    );
-
-  background-size:
-    170px 145px,
-    235px 210px,
-    195px 230px,
-    280px 180px,
-    150px 255px,
-    255px 165px;
-
-  opacity: 0.75;
-
-  animation:
-    cosmic-stars-far 7s
-    ease-in-out infinite alternate;
-}
-
-/* Estrelas próximas */
-body::after {
-  background-image:
-    radial-gradient(
-      circle at 32% 45%,
-      rgba(255, 236, 255, 1) 0 1.5px,
-      rgba(177, 139, 255, 0.45) 2px,
-      transparent 8px
-    ),
-    radial-gradient(
-      circle at 78% 24%,
-      rgba(216, 194, 255, 1) 0 1.3px,
-      rgba(121, 166, 255, 0.3) 3px,
-      transparent 10px
-    ),
-    radial-gradient(
-      circle at 18% 82%,
-      rgba(255, 208, 240, 0.95) 0 1.2px,
-      rgba(177, 139, 255, 0.3) 3px,
-      transparent 9px
-    );
-
-  background-size:
-    330px 290px,
-    360px 260px,
-    310px 270px;
-
-  opacity: 0.85;
-
-  animation:
-    cosmic-stars-near 5s
-    ease-in-out infinite alternate;
-}
-
-/* Movimento das estrelas distantes */
-@keyframes cosmic-stars-far {
-  from {
-    opacity: 0.55;
-    transform: translate3d(-20px, -12px, 0);
-  }
-
-  to {
-    opacity: 0.95;
-    transform: translate3d(24px, 16px, 0);
-  }
-}
-
-/* Movimento das estrelas próximas */
-@keyframes cosmic-stars-near {
-  from {
-    opacity: 0.55;
-    transform: translate3d(24px, -20px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(-26px, 22px, 0);
-  }
-}
-
-/* Acessibilidade */
-@media (prefers-reduced-motion: reduce) {
-  body::before,
-  body::after {
-    animation: none;
-  }
-}
-/* Estrelas distantes */
-body::before { animation-duration: 4.5s; }
-
-/* Estrelas próximas */
-body::after { animation-duration: 3s; }
-
+/* Estrelas independentes: CosmicStarfield.astro */
 
 /* Painéis tecnológicos */
 .tech-panel {
   --panel-energy: rgba(177, 139, 255, 0.8);
-
   position: relative;
   isolation: isolate;
 }
@@ -379,50 +191,36 @@ body::after { animation-duration: 3s; }
   position: absolute;
   inset: 0;
   z-index: -1;
-
   border-radius: inherit;
   pointer-events: none;
-
   background:
     linear-gradient(
       var(--panel-energy),
       var(--panel-energy)
     ) left top / 48px 1px no-repeat,
-
     linear-gradient(
       var(--panel-energy),
       var(--panel-energy)
     ) left top / 1px 48px no-repeat,
-
     linear-gradient(
       var(--panel-energy),
       var(--panel-energy)
     ) right bottom / 48px 1px no-repeat,
-
     linear-gradient(
       var(--panel-energy),
       var(--panel-energy)
     ) right bottom / 1px 48px no-repeat,
-
     linear-gradient(
       rgba(177, 139, 255, 0.06) 1px,
       transparent 1px
     ) 0 0 / 28px 28px,
-
     linear-gradient(
       90deg,
       rgba(177, 139, 255, 0.06) 1px,
       transparent 1px
     ) 0 0 / 28px 28px;
-
-  opacity: 0.5;
-
+  opacity: 0.7;
   transition: opacity 0.3s ease;
-}
-
-/* Reação ao cursor */
-.tech-panel:hover::after {
-  opacity: 0.9;
 }
 
 /* Movimento reduzido */
@@ -435,6 +233,7 @@ body::after { animation-duration: 3s; }
 /* Espaçamento da navegação por âncoras */
 #inicio,
 #servicos,
+#stack,
 #projetos,
 #faq,
 #contato {
@@ -444,6 +243,7 @@ body::after { animation-duration: 3s; }
 @media (max-width: 720px) {
   #inicio,
   #servicos,
+  #stack,
   #projetos,
   #faq,
   #contato {
@@ -456,46 +256,17 @@ body::after { animation-duration: 3s; }
 .featured-intro::after {
   content: "";
   display: block;
-
   width: min(210px, 80%);
   height: 1px;
-
   margin-top: 1.5rem;
-
   background: linear-gradient(
     90deg,
     var(--color-accent),
     rgba(177, 139, 255, 0.4),
     transparent
   );
-
   box-shadow:
     0 0 12px rgba(177, 139, 255, 0.35);
-}
-
-/* Navegação por âncora da Stack */
-#stack {
-  scroll-margin-top: 100px;
-}
-
-@media (max-width: 720px) {
-  #stack {
-    scroll-margin-top: 135px;
-  }
-}
-
-
-/* Energia dos cantos tecnológicos */
-.tech-panel:hover .panel-frame {
-  filter: drop-shadow(
-    0 0 7px var(--panel-energy, #b18bff)
-  );
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tech-panel:hover .panel-frame {
-    filter: none;
-  }
 }
 
 /* Energia luminosa dos painéis */
@@ -540,7 +311,6 @@ body::after { animation-duration: 3s; }
   .contact-card
 ) {
   border-color: rgba(177, 139, 255, 0.45);
-
   box-shadow:
     var(--shadow-panel),
     0 0 22px var(--panel-glow),
@@ -565,7 +335,6 @@ body::after { animation-duration: 3s; }
   .contact-card
 ):focus-within {
   border-color: var(--panel-energy, #b18bff);
-
   box-shadow:
     var(--shadow-panel),
     0 0 32px var(--panel-glow-hover),
@@ -592,26 +361,12 @@ body::after { animation-duration: 3s; }
   opacity: 0.65;
 }
 
-/* Quadriculado mais visível */
-.tech-panel::after {
-  opacity: 0.7;
-}
-
+/* Quadriculado mais visível no hover */
 .tech-panel:hover::after {
   opacity: 0.95;
 }
 
-/* Tipografia cósmica */
-:root {
-  --text-strong: #f9f8ff;
-  --text-violet: #dec6ff;
-  --text-blue: #a9c9ff;
-  --text-warm: #ffd1ad;
-
-  --color-muted: #c5c8db;
-}
-
-/* Títulos mais sólidos */
+/* Tipografia cósmica — títulos mais sólidos */
 :where(h1, h2, h3) {
   color: var(--text-strong);
   font-weight: 800;
@@ -625,7 +380,6 @@ body::after { animation-duration: 3s; }
 /* Palavra luminosa principal */
 .glow-word {
   color: var(--text-violet);
-
   text-shadow:
     0 0 8px rgba(194, 149, 255, 0.55),
     0 0 24px rgba(151, 88, 255, 0.35),
@@ -635,7 +389,6 @@ body::after { animation-duration: 3s; }
 /* Variação azul */
 .glow-word--blue {
   color: var(--text-blue);
-
   text-shadow:
     0 0 8px rgba(145, 187, 255, 0.5),
     0 0 24px rgba(90, 138, 255, 0.3);
@@ -644,7 +397,6 @@ body::after { animation-duration: 3s; }
 /* Variação quente */
 .glow-word--warm {
   color: var(--text-warm);
-
   text-shadow:
     0 0 8px rgba(255, 183, 137, 0.5),
     0 0 24px rgba(255, 131, 102, 0.25);
@@ -667,16 +419,12 @@ body::after { animation-duration: 3s; }
 @supports (mask-composite: exclude) {
   .tech-panel .panel-frame::before {
     content: "";
-
     position: absolute;
     inset: 0;
     z-index: 1;
-
     box-sizing: border-box;
     padding: 2px;
-
     border-radius: inherit;
-
     background: conic-gradient(
       from var(--panel-beam-angle),
       transparent 0deg 268deg,
@@ -686,40 +434,30 @@ body::after { animation-duration: 3s; }
       currentColor 334deg,
       transparent 353deg 360deg
     );
-
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
-
     -webkit-mask-composite: xor;
-
     mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
-
     mask-composite: exclude;
-
     opacity: 0.55;
     pointer-events: none;
-
     animation: panel-beam-orbit 14s linear infinite;
-
     transition: opacity 300ms ease;
   }
-
   /* Energia intensificada ao interagir */
   .tech-panel:hover .panel-frame::before,
   .tech-panel:focus-within .panel-frame::before {
     opacity: 1;
     animation-duration: 5s;
   }
-
   /* Painéis pequenos recebem um feixe delicado */
   .tech-panel.contact-card .panel-frame::before,
   .tech-panel.faq-item .panel-frame::before {
     opacity: 0.35;
   }
-
   .tech-panel.contact-card:hover .panel-frame::before,
   .tech-panel.faq-item:hover .panel-frame::before,
   .tech-panel.contact-card:focus-within .panel-frame::before,
