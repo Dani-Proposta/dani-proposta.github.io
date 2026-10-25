@@ -1,146 +1,905 @@
 
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PanelFrame from "../../components/ui/PanelFrame.astro";
+import CosmicButton from "../../components/ui/CosmicButton.astro";
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { services } from "../../data/services";
 
-// Gera uma URL para cada projeto da coleção.
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+/* Gera uma rota para cada projeto */
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
 
   return projects.map((project) => ({
     params: { id: project.id },
-    props: { project },
+    props: { project }
   }));
-}
-
-// Define o tipo dos dados recebidos pela página.
-interface Props {
-  project: CollectionEntry<"projects">;
 }
 
 const { project } = Astro.props;
 
-// Converte o corpo Markdown em um componente renderizável.
-const { Content } = await render(project);
+/* Preserva o conteúdo original do Markdown */
+const { Content, headings } = await render(project);
 
 const service = services.find(
   (item) => item.slug === project.data.service
 );
+
+const isVideo = project.data.service === "edicao-video";
+const isFeatured = Boolean(project.data.featured);
+
+/* Monta o índice a partir dos títulos do Markdown */
+const sections = headings.filter(
+  (heading) => heading.depth === 2
+);
+
+/* Sugestões da mesma especialidade */
+const relatedProjects = (await getCollection("projects"))
+  .filter(
+    (item) =>
+      item.id !== project.id &&
+      item.data.service === project.data.service
+  )
+  .slice(0, 2);
 ---
 
-<BaseLayout
-  title={`${project.data.title} | Dani`}
-  description={project.data.summary}
->
-  <article class="project-page">
-    <a class="back-link" href="/projetos/">
-      ← Voltar aos projetos
-    </a>
+<BaseLayout title={`${project.data.title} | Dani`}>
+  <div class="project-detail">
 
-    <header class="project-heading">
-      <p class="category">
-        {service?.title ?? "Projeto"}
-      </p>
+    <!-- Navegação de retorno -->
+    <nav class="project-breadcrumb" aria-label="Navegação">
+      <a href="/projetos/">Projetos</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{project.data.title}</span>
+    </nav>
 
-      <h1>{project.data.title}</h1>
+    <!-- Apresentação do projeto -->
+    <header
+      class="project-hero tech-panel"
+      data-kind={project.data.service}
+    >
+      <PanelFrame />
 
-      <p>{project.data.summary}</p>
+      <div class="project-hero__top">
+        <span class="project-hero__eyebrow">
+          <span class="project-hero__signal"></span>
+          {service?.title ?? "Projeto"}
+        </span>
 
-      <div class="technologies">
-        {project.data.technologies.map((technology) => (
-          <span>{technology}</span>
-        ))}
+        {isFeatured && (
+          <span class="project-hero__featured">
+            ✦ PROJETO EM DESTAQUE
+          </span>
+        )}
+      </div>
+
+      <div class="project-hero__grid">
+        <div class="project-hero__copy">
+          <span class="project-hero__label">
+            APRESENTAÇÃO DE PROJETO
+          </span>
+
+          <h1>{project.data.title}</h1>
+
+          <p>{project.data.summary}</p>
+
+          <div class="project-hero__technologies">
+            {project.data.technologies.map((technology) => (
+              <span>{technology}</span>
+            ))}
+          </div>
+        </div>
+
+        <!-- Elemento visual temporário -->
+        <div class="project-hero__visual" aria-hidden="true">
+          <div class="project-hero__orbit project-hero__orbit--outer"></div>
+          <div class="project-hero__orbit project-hero__orbit--inner"></div>
+
+          <span class="project-hero__symbol">
+            {isVideo ? "▶" : "</>"}
+          </span>
+
+          <span class="project-hero__visual-label">
+            {isVideo ? "AUDIOVISUAL" : "SOFTWARE"}
+          </span>
+        </div>
+      </div>
+
+      <div class="project-hero__footer">
+        <span class="project-hero__line"></span>
+        <span>DOCUMENTAÇÃO / PROJETO</span>
       </div>
     </header>
 
-    <div class="project-documentation">
-      <Content />
+    <!-- Navegação pelo conteúdo -->
+    {sections.length > 0 && (
+      <nav
+        class="project-index"
+        aria-label="Seções do projeto"
+      >
+        <span class="project-index__title">
+          NESTE PROJETO
+        </span>
+
+        <div class="project-index__links">
+          {sections.map((heading, index) => (
+            <a href={`#${heading.slug}`}>
+              <span>
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              {heading.text}
+            </a>
+          ))}
+        </div>
+      </nav>
+    )}
+
+    <!-- Conteúdo real do Markdown -->
+    <div class="project-content-layout">
+      <article
+        class="project-article tech-panel"
+        data-kind={project.data.service}
+        aria-label="Detalhes do projeto"
+      >
+        <PanelFrame />
+
+        <div class="project-article__heading">
+          <span>✦</span>
+          DOCUMENTAÇÃO TÉCNICA
+        </div>
+
+        <div class="project-prose">
+          <Content />
+        </div>
+      </article>
+
+      <!-- Informações técnicas -->
+      <aside class="project-sidebar">
+        <div
+          class="project-sidebar__panel tech-panel"
+          data-kind={project.data.service}
+        >
+          <PanelFrame />
+
+          <span class="project-sidebar__eyebrow">
+            INFORMAÇÕES
+          </span>
+
+          <h2>Sobre o projeto</h2>
+
+          <div class="project-sidebar__row">
+            <span>Especialidade</span>
+            <strong>{service?.title ?? "Projeto"}</strong>
+          </div>
+
+          <div class="project-sidebar__row">
+            <span>Tecnologias</span>
+            <strong>
+              {project.data.technologies.length}
+            </strong>
+          </div>
+
+          <div class="project-sidebar__stack">
+            {project.data.technologies.map((technology) => (
+              <span>{technology}</span>
+            ))}
+          </div>
+        </div>
+
+        <div class="project-sidebar__note">
+          <span>✧</span>
+          <p>
+            Quer conversar sobre um trabalho semelhante?
+            Entre em contato para apresentar sua ideia.
+          </p>
+
+          <CosmicButton
+            href="/#contato"
+            variant="secondary"
+          >
+            Entrar em contato
+          </CosmicButton>
+        </div>
+      </aside>
     </div>
 
-    <footer class="project-links">
-      {project.data.repository && (
-        <a
-          href={project.data.repository}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Ver repositório ↗
-        </a>
-      )}
+    <!-- Outros projetos reais -->
+    {relatedProjects.length > 0 && (
+      <section
+        class="project-related"
+        aria-labelledby="related-title"
+      >
+        <div class="project-related__heading">
+          <span>✦ CONTINUAR EXPLORANDO</span>
+          <h2 id="related-title">
+            Outros <span class="glow-word">projetos.</span>
+          </h2>
+        </div>
 
-      {project.data.demo && (
-        <a
-          href={project.data.demo}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Abrir demonstração ↗
-        </a>
-      )}
+        <div class="project-related__grid">
+          {relatedProjects.map((related) => (
+            <a
+              class="project-related__card tech-panel"
+              href={`/projetos/${related.id}/`}
+            >
+              <PanelFrame />
+
+              <span>PROJETO / {service?.title ?? "PORTFÓLIO"}</span>
+
+              <h3>{related.data.title}</h3>
+              <p>{related.data.summary}</p>
+
+              <strong>Explorar projeto ↗</strong>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Final da página -->
+    <footer class="project-detail__footer">
+      <span>FIM DO REGISTRO ✦</span>
+
+      <CosmicButton
+        href="/projetos/"
+        variant="secondary"
+      >
+        Voltar aos projetos
+      </CosmicButton>
     </footer>
-  </article>
+
+  </div>
 </BaseLayout>
 
 <style>
-  .project-page {
-    max-width: 850px;
+  /* Estrutura geral */
+  .project-detail {
+    width: min(1180px, 92%);
     margin-inline: auto;
-    padding-block: 3rem 5rem;
+    padding-bottom: 5rem;
   }
 
-  .back-link,
-  .category {
-    color: var(--color-accent);
-  }
-
-  .project-heading {
-    margin-top: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .technologies {
+  /* Navegação superior */
+  .project-breadcrumb {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: 1.5rem;
+
+    padding-block: 2.5rem 1.5rem;
+
+    font-size: 0.8rem;
   }
 
-  .technologies span {
-    padding: 0.4rem 0.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    font-size: 0.85rem;
+  .project-breadcrumb a {
+    color: #c9abff;
+    text-decoration: none;
   }
 
-  .project-documentation {
-    padding-block: 2rem;
+  .project-breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .project-breadcrumb > span {
+    color: #a9a6c1;
+  }
+
+  /* Painel principal */
+  .project-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    padding: clamp(1.7rem, 4vw, 3.5rem);
+
+    border: 1px solid rgba(177, 139, 255, 0.45);
+    border-radius: 20px;
+
+    background:
+      radial-gradient(
+        ellipse at 85% 30%,
+        rgba(122, 65, 192, 0.23),
+        transparent 55%
+      ),
+      linear-gradient(
+        145deg,
+        rgba(23, 23, 44, 0.97),
+        rgba(10, 13, 27, 0.98)
+      );
+  }
+
+  .project-hero__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .project-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+
+    color: #d2b4ff;
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .project-hero__signal {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+
+    background: #ddbaff;
+    box-shadow: 0 0 12px #b18bff;
+  }
+
+  .project-hero__featured {
+    color: #dec7ff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .project-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr);
+    align-items: center;
+    gap: 2rem;
+
+    margin-top: 2.75rem;
+  }
+
+  .project-hero__label {
+    color: #9e9ab8;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+  }
+
+  .project-hero h1 {
+    max-width: 800px;
+
+    margin: 0.8rem 0 1.2rem;
+
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    line-height: 1.08;
+
+    text-wrap: balance;
+  }
+
+  .project-hero__copy > p {
+    max-width: 610px;
+    margin: 0;
+
+    color: #c4c4d8;
+    font-size: 1rem;
     line-height: 1.8;
   }
 
-  .project-documentation :global(h2) {
+  /* Tecnologias da introdução */
+  .project-hero__technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+
+    margin-top: 1.8rem;
+  }
+
+  .project-hero__technologies span,
+  .project-sidebar__stack span {
+    padding: 0.4rem 0.7rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.3);
+    border-radius: 8px;
+
+    background: rgba(177, 139, 255, 0.06);
+
+    color: #e4d7f6;
+    font-size: 0.74rem;
+  }
+
+  /* Visual abstrato temporário */
+  .project-hero__visual {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    min-height: 230px;
+
+    border: 1px solid rgba(177, 139, 255, 0.16);
+    border-radius: 16px;
+
+    background:
+      linear-gradient(
+        rgba(177, 139, 255, 0.045) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgba(177, 139, 255, 0.045) 1px,
+        transparent 1px
+      ),
+      rgba(15, 13, 31, 0.5);
+
+    background-size: 28px 28px;
+    overflow: hidden;
+  }
+
+  .project-hero__orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    border: 1px solid rgba(177, 139, 255, 0.2);
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .project-hero__orbit--outer {
+    width: 240px;
+    height: 240px;
+  }
+
+  .project-hero__orbit--inner {
+    width: 155px;
+    height: 155px;
+
+    box-shadow: 0 0 35px rgba(177, 139, 255, 0.12);
+  }
+
+  .project-hero__symbol {
+    position: relative;
+
+    display: grid;
+    place-items: center;
+
+    width: 76px;
+    height: 76px;
+
+    border: 1px solid rgba(177, 139, 255, 0.6);
+    border-radius: 17px;
+
+    background: rgba(36, 22, 67, 0.85);
+
+    color: #e0c6ff;
+    font-family: monospace;
+    font-size: 1.75rem;
+    font-weight: 800;
+
+    box-shadow: 0 0 28px rgba(177, 139, 255, 0.3);
+  }
+
+  .project-hero__visual-label {
+    position: relative;
+
+    color: #c5a6ea;
+    font-size: 0.63rem;
+    letter-spacing: 0.2em;
+  }
+
+  .project-hero__footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
     margin-top: 2.5rem;
-    color: var(--color-text);
+
+    color: #a3a0bc;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
   }
 
-  .project-documentation :global(p),
-  .project-documentation :global(li) {
-    color: var(--color-muted);
+  .project-hero__line {
+    width: 95px;
+    height: 1px;
+
+    background: linear-gradient(
+      90deg,
+      #c9a6ff,
+      transparent
+    );
+
+    box-shadow: 0 0 9px rgba(177, 139, 255, 0.6);
   }
 
-  .project-documentation :global(img) {
+  /* Índice de capítulos do Markdown */
+  .project-index {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem 1.6rem;
+
+    padding: 2rem 0;
+
+    border-bottom: 1px solid rgba(177, 139, 255, 0.2);
+  }
+
+  .project-index__title {
+    color: #bca1df;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+  }
+
+  .project-index__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  .project-index__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+
+    padding: 0.55rem 0.75rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.2);
+    border-radius: 9px;
+
+    background: rgba(19, 18, 37, 0.8);
+
+    color: #d4c5ec;
+    font-size: 0.75rem;
+    text-decoration: none;
+
+    transition:
+      border-color 200ms ease,
+      background 200ms ease;
+  }
+
+  .project-index__links a span {
+    color: #b18bff;
+    font-size: 0.65rem;
+  }
+
+  .project-index__links a:hover {
+    border-color: rgba(177, 139, 255, 0.7);
+    background: rgba(69, 38, 108, 0.36);
+  }
+
+  /* Layout da documentação */
+  .project-content-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    align-items: start;
+    gap: 1.5rem;
+
+    margin-top: 2.5rem;
+  }
+
+  .project-article,
+  .project-sidebar__panel {
+    position: relative;
+    isolation: isolate;
+
+    border: 1px solid rgba(177, 139, 255, 0.35);
+    border-radius: 17px;
+
+    background: rgba(17, 20, 37, 0.95);
+  }
+
+  .project-article {
+    min-width: 0;
+    padding: clamp(1.4rem, 3vw, 2.7rem);
+  }
+
+  .project-article__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+
+    padding-bottom: 1.5rem;
+
+    border-bottom: 1px solid rgba(177, 139, 255, 0.18);
+
+    color: #c2a0f2;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+  }
+
+  .project-article__heading span {
+    font-size: 1rem;
+  }
+
+  /* Tipografia do Markdown */
+  .project-prose {
+    min-width: 0;
+    padding-top: 0.75rem;
+
+    color: #c8c9d9;
+    overflow-wrap: anywhere;
+  }
+
+  .project-prose :global(h2) {
+    margin: 2.8rem 0 1rem;
+
+    color: #f6f3ff;
+    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+
+    scroll-margin-top: 110px;
+  }
+
+  .project-prose :global(h2)::before {
+    content: "✦";
+
+    margin-right: 0.7rem;
+
+    color: #c5a0ff;
+    font-size: 0.8em;
+
+    text-shadow: 0 0 12px rgba(177, 139, 255, 0.6);
+  }
+
+  .project-prose :global(h3) {
+    margin-top: 2rem;
+
+    color: #e7d9ff;
+    font-size: 1.18rem;
+  }
+
+  .project-prose :global(p),
+  .project-prose :global(li) {
+    color: #c4c6d9;
+    font-size: 0.93rem;
+    line-height: 1.85;
+  }
+
+  .project-prose :global(a) {
+    color: #d6b5ff;
+    text-underline-offset: 4px;
+  }
+
+  .project-prose :global(ul),
+  .project-prose :global(ol) {
+    padding-left: 1.4rem;
+  }
+
+  .project-prose :global(img) {
+    display: block;
+
     max-width: 100%;
     height: auto;
+
+    margin: 1.8rem auto;
+
+    border: 1px solid rgba(177, 139, 255, 0.28);
     border-radius: 12px;
   }
 
-  .project-links {
+  .project-prose :global(pre) {
+    max-width: 100%;
+    padding: 1.3rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.25);
+    border-radius: 12px;
+
+    background: #0b0d1a;
+
+    overflow-x: auto;
+  }
+
+  .project-prose :global(blockquote) {
+    margin: 2rem 0;
+    padding: 0.6rem 1.4rem;
+
+    border-left: 2px solid #a979ea;
+
+    background: rgba(177, 139, 255, 0.05);
+  }
+
+  /* Painel lateral */
+  .project-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    position: sticky;
+    top: 105px;
+  }
+
+  .project-sidebar__panel {
+    padding: 1.5rem;
+  }
+
+  .project-sidebar__eyebrow {
+    color: #c29de9;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+  }
+
+  .project-sidebar__panel h2 {
+    margin: 0.7rem 0 1.5rem;
+    font-size: 1.25rem;
+  }
+
+  .project-sidebar__row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    padding: 0.8rem 0;
+
+    border-bottom: 1px solid rgba(177, 139, 255, 0.15);
+  }
+
+  .project-sidebar__row span {
+    color: #9c9fb8;
+    font-size: 0.7rem;
+  }
+
+  .project-sidebar__row strong {
+    color: #e6dbf7;
+    font-size: 0.85rem;
+  }
+
+  .project-sidebar__stack {
     display: flex;
     flex-wrap: wrap;
+    gap: 0.5rem;
+
+    margin-top: 1.3rem;
+  }
+
+  .project-sidebar__note {
+    padding: 1.3rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.22);
+    border-radius: 14px;
+
+    background: rgba(30, 22, 54, 0.65);
+  }
+
+  .project-sidebar__note > span {
+    color: #c5a1ff;
+    font-size: 1.5rem;
+  }
+
+  .project-sidebar__note p {
+    margin: 0.55rem 0 1.25rem;
+    font-size: 0.84rem;
+  }
+
+  /* Projetos relacionados */
+  .project-related {
+    padding-top: 5rem;
+  }
+
+  .project-related__heading > span {
+    color: #bfa0e8;
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+  }
+
+  .project-related__heading h2 {
+    margin: 0.7rem 0 1.7rem;
+    font-size: clamp(1.8rem, 3vw, 2.7rem);
+  }
+
+  .project-related__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .project-related__card {
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 1.7rem;
+
+    border: 1px solid rgba(177, 139, 255, 0.35);
+    border-radius: 15px;
+
+    background: rgba(19, 20, 38, 0.93);
+
+    text-decoration: none;
+  }
+
+  .project-related__card > span {
+    color: #c9a6ff;
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+  }
+
+  .project-related__card h3 {
+    margin: 1rem 0 0.5rem;
+    color: #f4efff;
+  }
+
+  .project-related__card p {
+    flex: 1;
+    font-size: 0.86rem;
+  }
+
+  .project-related__card strong {
+    margin-top: 1rem;
+
+    color: #d8bbff;
+    font-size: 0.82rem;
+  }
+
+  /* Rodapé */
+  .project-detail__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 1.5rem;
+
+    margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid var(--color-border);
+
+    border-top: 1px solid rgba(177, 139, 255, 0.2);
+  }
+
+  .project-detail__footer > span {
+    color: #a9a4c0;
+    font-size: 0.7rem;
+    letter-spacing: 0.13em;
+  }
+
+  /* Tablets */
+  @media (max-width: 900px) {
+    .project-hero__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .project-hero__visual {
+      min-height: 180px;
+    }
+
+    .project-content-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .project-sidebar {
+      position: static;
+
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Celulares */
+  @media (max-width: 600px) {
+    .project-hero {
+      padding: 1.6rem;
+    }
+
+    .project-sidebar {
+      grid-template-columns: 1fr;
+    }
+
+    .project-related__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .project-index__links {
+      width: 100%;
+    }
+
+    .project-index__links a {
+      flex-grow: 1;
+    }
   }
 </style>
