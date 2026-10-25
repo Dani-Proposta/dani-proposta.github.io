@@ -649,3 +649,97 @@ body::after { animation-duration: 3s; }
     0 0 8px rgba(255, 183, 137, 0.5),
     0 0 24px rgba(255, 131, 102, 0.25);
 }
+
+/* C1 — Energia orbital dos painéis */
+@property --panel-beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes panel-beam-orbit {
+  to {
+    --panel-beam-angle: 360deg;
+  }
+}
+
+/* Feixe luminoso limitado à borda */
+@supports (mask-composite: exclude) {
+  .tech-panel .panel-frame::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    box-sizing: border-box;
+    padding: 2px;
+
+    border-radius: inherit;
+
+    background: conic-gradient(
+      from var(--panel-beam-angle),
+      transparent 0deg 268deg,
+      rgba(255, 255, 255, 0.04) 290deg,
+      currentColor 315deg,
+      #ffffff 325deg,
+      currentColor 334deg,
+      transparent 353deg 360deg
+    );
+
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+
+    mask-composite: exclude;
+
+    opacity: 0.55;
+    pointer-events: none;
+
+    animation: panel-beam-orbit 14s linear infinite;
+
+    transition: opacity 300ms ease;
+  }
+
+  /* Energia intensificada ao interagir */
+  .tech-panel:hover .panel-frame::before,
+  .tech-panel:focus-within .panel-frame::before {
+    opacity: 1;
+    animation-duration: 5s;
+  }
+
+  /* Painéis pequenos recebem um feixe delicado */
+  .tech-panel.contact-card .panel-frame::before,
+  .tech-panel.faq-item .panel-frame::before {
+    opacity: 0.35;
+  }
+
+  .tech-panel.contact-card:hover .panel-frame::before,
+  .tech-panel.faq-item:hover .panel-frame::before,
+  .tech-panel.contact-card:focus-within .panel-frame::before,
+  .tech-panel.faq-item:focus-within .panel-frame::before {
+    opacity: 0.85;
+  }
+}
+
+/* No celular, mantemos a iluminação estática */
+@media (max-width: 768px) {
+  .tech-panel .panel-frame::before {
+    animation: none;
+    --panel-beam-angle: 325deg;
+  }
+}
+
+/* Respeita movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .tech-panel .panel-frame::before {
+    animation: none !important;
+    --panel-beam-angle: 325deg;
+  }
+}

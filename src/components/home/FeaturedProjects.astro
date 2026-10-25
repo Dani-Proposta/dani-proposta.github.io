@@ -47,10 +47,13 @@ import CosmicButton from "../ui/CosmicButton.astro";
         e produção audiovisual.
       </p>
 
-      <a class="featured-all" href="/projetos/">
+      <CosmicButton
+        href="/projetos/"
+        variant="primary"
+      >
         Ver todos os projetos
-        <span aria-hidden="true">↗</span>
-      </a>
+      </CosmicButton>
+
     </div>
 
     {featuredProjects.length > 0 ? (
