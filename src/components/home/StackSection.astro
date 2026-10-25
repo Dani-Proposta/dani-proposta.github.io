@@ -1,4 +1,3 @@
-
 ---
 import { stackGroups } from "../../data/stack";
 import SectionMarker from "../ui/SectionMarker.astro";
@@ -6,22 +5,19 @@ import PanelFrame from "../ui/PanelFrame.astro";
 ---
 
 <section
-  class="stack-section"  id="stack"  aria-labelledby="stack-title">
+  class="stack-section"
+  id="stack"
+  aria-labelledby="stack-title"
+>
   <div class="stack-heading">
     <SectionMarker
-    number="03"
-    label="TECNOLOGIAS & FERRAMENTAS"
+      number="03"
+      label="TECNOLOGIAS & FERRAMENTAS"
     />
 
-
     <h2 id="stack-title">
-    As ferramentas por trás das
-
-    <span class="glow-word glow-word--blue">
-    &nbsp;soluções.
-    </span>
+      As ferramentas por trás das{" "}<span class="glow-word glow-word--blue">soluções.</span>
     </h2>
-
 
     <p>
       Tecnologias e ferramentas que utilizo em
@@ -38,6 +34,7 @@ import PanelFrame from "../ui/PanelFrame.astro";
         id={`stack-${group.id}`}
       >
         <PanelFrame />
+
         <div class="stack-panel__heading">
           <span class="stack-panel__category">
             {group.area === "development"
@@ -46,15 +43,12 @@ import PanelFrame from "../ui/PanelFrame.astro";
           </span>
 
           <h3>{group.title}</h3>
-
           <p>{group.description}</p>
         </div>
 
         <ul class="stack-items">
           {group.items.map((item) => (
-            <li class="stack-chip">
-              {item}
-            </li>
+            <li class="stack-chip">{item}</li>
           ))}
         </ul>
       </article>
@@ -63,25 +57,23 @@ import PanelFrame from "../ui/PanelFrame.astro";
 </section>
 
 <style>
+  /* Estrutura geral */
   .stack-section {
+    min-width: 0;
     padding-block: 4rem 5rem;
   }
 
   .stack-heading {
+    min-width: 0;
     max-width: 690px;
     margin-bottom: 2rem;
-  }
-
-  .stack-eyebrow {
-    color: var(--color-accent);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
   }
 
   .stack-heading h2 {
     margin-block: 1rem;
     font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+    line-height: 1.18;
+    overflow-wrap: break-word;
   }
 
   .stack-heading p {
@@ -93,6 +85,7 @@ import PanelFrame from "../ui/PanelFrame.astro";
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
+    min-width: 0;
   }
 
   .stack-panel {
@@ -103,9 +96,9 @@ import PanelFrame from "../ui/PanelFrame.astro";
     flex-direction: column;
     gap: 2rem;
 
-    padding: clamp(1.25rem, 2.5vw, 1.8rem);
     min-width: 0;
     min-height: 230px;
+    padding: clamp(1.25rem, 2.5vw, 1.8rem);
 
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -174,6 +167,10 @@ import PanelFrame from "../ui/PanelFrame.astro";
   }
 
   /* Conteúdo dos painéis */
+  .stack-panel__heading {
+    min-width: 0;
+  }
+
   .stack-panel__category {
     color: var(--color-accent);
     font-size: 0.7rem;
@@ -189,6 +186,7 @@ import PanelFrame from "../ui/PanelFrame.astro";
   .stack-panel h3 {
     margin-block: 0.75rem;
     font-size: 1.25rem;
+    overflow-wrap: break-word;
   }
 
   .stack-panel p {
@@ -202,17 +200,20 @@ import PanelFrame from "../ui/PanelFrame.astro";
     flex-wrap: wrap;
     gap: 0.55rem;
 
+    min-width: 0;
     margin: auto 0 0;
     padding: 0;
     list-style: none;
   }
 
   .stack-chip {
+    max-width: 100%;
     padding: 0.45rem 0.8rem;
 
     color: #ded8f1;
     font-size: 0.8rem;
     line-height: 1.3;
+    overflow-wrap: anywhere;
 
     background: rgba(255, 255, 255, 0.035);
 
@@ -220,14 +221,60 @@ import PanelFrame from "../ui/PanelFrame.astro";
     border-radius: var(--radius-sm);
   }
 
-  /* Responsividade */
-  @media (max-width: 720px) {
+  /* No tablet, cada painel recebe a largura necessária */
+  @media (max-width: 900px) {
+    .stack-section {
+      padding-block: 3rem 3.8rem;
+    }
+
     .stack-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
     }
 
     .stack-panel {
-      min-height: auto;
+      min-height: 0;
+      gap: 1.4rem;
+      padding: clamp(1.25rem, 3.5vw, 1.8rem);
+    }
+  }
+
+  /* No celular, mantém títulos e chips confortáveis */
+  @media (max-width: 600px) {
+    .stack-section {
+      padding-block: 2.6rem 3.2rem;
+    }
+
+    .stack-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .stack-heading h2 {
+      font-size: clamp(1.7rem, 7vw, 2.15rem);
+      line-height: 1.2;
+    }
+
+    .stack-heading p {
+      font-size: 0.94rem;
+      line-height: 1.7;
+    }
+
+    .stack-panel {
+      gap: 1.2rem;
+      padding: 1.25rem;
+    }
+
+    .stack-panel h3 {
+      font-size: 1.18rem;
+    }
+
+    .stack-items {
+      gap: 0.45rem;
+    }
+
+    .stack-chip {
+      padding: 0.4rem 0.65rem;
+      font-size: 0.76rem;
     }
   }
 

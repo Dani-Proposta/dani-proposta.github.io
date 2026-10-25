@@ -1,15 +1,13 @@
-
 ---
 import { services } from "../../data/services";
-
-const selectedServices = ["programacao", "edicao-video"]
-  .flatMap((slug) => {
-    const service = services.find((item) => item.slug === slug);
-    return service ? [service] : [];
-  });
-
 import SectionMarker from "../ui/SectionMarker.astro";
 import PanelFrame from "../ui/PanelFrame.astro";
+
+/* Seleciona apenas serviços cadastrados */
+const selectedServices = ["programacao", "edicao-video"].flatMap((slug) => {
+  const service = services.find((item) => item.slug === slug);
+  return service ? [service] : [];
+});
 ---
 
 <section
@@ -19,18 +17,14 @@ import PanelFrame from "../ui/PanelFrame.astro";
 >
   <div class="services-layout">
     <div class="services-intro">
-        <SectionMarker
-    number="02"
-    label="ÁREAS DE ATUAÇÃO"
-    />
+      <SectionMarker
+        number="02"
+        label="ÁREAS DE ATUAÇÃO"
+      />
 
-
-    <h2 id="services-title">
-    Do planejamento
-    <span class="glow-word"> à entrega.</span>
+      <h2 id="services-title">
+      Do planejamento{" "}<span class="glow-word">à entrega.</span>
     </h2>
-
-
       <p>
         Desenvolvimento e edição audiovisual
         com atenção aos detalhes e foco
@@ -48,7 +42,6 @@ import PanelFrame from "../ui/PanelFrame.astro";
         <span class="service-card__arrow" aria-hidden="true">
           ↗
         </span>
-
         <div class="service-card__art" aria-hidden="true">
           {service.slug === "programacao" ? (
             <div class="code-window">
@@ -78,15 +71,12 @@ import PanelFrame from "../ui/PanelFrame.astro";
             </div>
           )}
         </div>
-
         <div class="service-card__content">
           <span class="service-card__icon" aria-hidden="true">
             {service.slug === "programacao" ? "</>" : "▶"}
           </span>
-
           <h3>{service.title}</h3>
           <p>{service.summary}</p>
-
           <div class="service-card__tags">
             {service.slug === "programacao" ? (
               <>
@@ -112,7 +102,6 @@ import PanelFrame from "../ui/PanelFrame.astro";
   .services-showcase {
     padding-block: 3rem;
   }
-
   .services-layout {
     display: grid;
     grid-template-columns:
@@ -121,25 +110,21 @@ import PanelFrame from "../ui/PanelFrame.astro";
     align-items: stretch;
     gap: 1rem;
   }
-
   .services-intro {
     align-self: center;
     padding: 1.25rem 1rem 1.25rem 0;
   }
-
   .section-eyebrow {
     color: var(--color-accent);
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.18em;
   }
-
   .services-intro h2 {
     margin-block: 1rem;
     font-size: clamp(1.5rem, 2.5vw, 2rem);
     line-height: 1.15;
   }
-
   .services-intro p {
     margin: 0;
     font-size: 0.9rem;
@@ -150,18 +135,14 @@ import PanelFrame from "../ui/PanelFrame.astro";
     position: relative;
     isolation: isolate;
     overflow: hidden;
-
     display: flex;
     min-width: 0;
     min-height: 260px;
     padding: 1.5rem;
-
     color: var(--color-text);
     text-decoration: none;
-
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-
     background:
       linear-gradient(
         125deg,
@@ -169,15 +150,12 @@ import PanelFrame from "../ui/PanelFrame.astro";
         transparent 75%
       ),
       var(--color-surface);
-
     box-shadow: var(--shadow-panel);
-
     transition:
       transform 0.25s ease,
       border-color 0.25s ease,
       box-shadow 0.25s ease;
   }
-
   .service-card:hover {
     transform: translateY(-4px);
     border-color: var(--color-accent);
@@ -195,7 +173,6 @@ import PanelFrame from "../ui/PanelFrame.astro";
     left: 12%;
     width: 45%;
     height: 2px;
-
     background: linear-gradient(
       90deg,
       transparent,
@@ -214,7 +191,6 @@ import PanelFrame from "../ui/PanelFrame.astro";
       ),
       var(--color-surface);
   }
-
   .service-card[data-kind="edicao-video"]::before {
     background: linear-gradient(
       90deg,
@@ -223,7 +199,6 @@ import PanelFrame from "../ui/PanelFrame.astro";
       transparent
     );
   }
-
   .service-card[data-kind="edicao-video"]:hover {
     border-color: var(--color-accent-warm);
     box-shadow:
@@ -235,50 +210,39 @@ import PanelFrame from "../ui/PanelFrame.astro";
   .service-card__content {
     position: relative;
     z-index: 2;
-
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
     width: 65%;
     min-height: 100%;
   }
-
   .service-card__icon {
     display: grid;
     place-items: center;
-
     width: 42px;
     height: 42px;
     margin-bottom: 1.5rem;
-
     border: 1px solid rgba(177, 139, 255, 0.4);
     border-radius: 12px;
-
     color: var(--color-accent);
     background: rgba(177, 139, 255, 0.12);
-
     font-weight: 700;
   }
-
   .service-card[data-kind="edicao-video"]
   .service-card__icon {
     color: var(--color-accent-warm);
     background: rgba(255, 177, 122, 0.1);
     border-color: rgba(255, 177, 122, 0.35);
   }
-
   .service-card h3 {
     margin: 0 0 0.75rem;
     font-size: 1.3rem;
   }
-
   .service-card p {
     margin: 0;
     font-size: 0.88rem;
     line-height: 1.6;
   }
-
   .service-card__tags {
     display: flex;
     flex-wrap: wrap;
@@ -286,34 +250,25 @@ import PanelFrame from "../ui/PanelFrame.astro";
     margin-top: auto;
     padding-top: 1.5rem;
   }
-
   .service-card__tags span {
     padding: 0.3rem 0.55rem;
-
     border: 1px solid var(--color-border);
     border-radius: 999px;
-
     color: var(--color-muted);
     background: rgba(8, 11, 22, 0.75);
-
     font-size: 0.68rem;
   }
-
   .service-card__arrow {
     position: absolute;
     z-index: 5;
     right: 1rem;
     top: 1rem;
-
     display: grid;
     place-items: center;
-
     width: 34px;
     height: 34px;
-
     border: 1px solid var(--color-border-highlight);
     border-radius: 50%;
-
     color: var(--color-text);
     background: rgba(8, 11, 22, 0.7);
   }
@@ -324,10 +279,8 @@ import PanelFrame from "../ui/PanelFrame.astro";
     z-index: 0;
     top: 18%;
     right: -12%;
-
     width: 59%;
     height: 70%;
-
     transform: rotate(-8deg);
     pointer-events: none;
   }
@@ -337,29 +290,23 @@ import PanelFrame from "../ui/PanelFrame.astro";
     height: 100%;
     border: 1px solid #514779;
     border-radius: 12px;
-
     background: #0a0d1c;
-
     box-shadow:
       0 10px 35px #05040e,
       0 0 35px rgba(146, 96, 255, 0.2);
   }
-
   .code-window__header {
     display: flex;
     gap: 5px;
     padding: 12px;
-
     border-bottom: 1px solid #302b49;
   }
-
   .code-window__header span {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: #6f658c;
   }
-
   .code-window__body {
     display: flex;
     flex-direction: column;
@@ -367,42 +314,35 @@ import PanelFrame from "../ui/PanelFrame.astro";
     gap: 11px;
     padding: 18px 14px;
   }
-
   .code-line {
     display: block;
     height: 5px;
     border-radius: 4px;
   }
-
   .code-line--one {
     width: 70%;
     background: #aa83ff;
   }
-
   .code-line--two {
     width: 45%;
     margin-left: 12%;
     background: #79a6ff;
   }
-
   .code-line--three {
     width: 62%;
     margin-left: 12%;
     background: #ffb17a;
   }
-
   .code-line--four {
     width: 38%;
     margin-left: 20%;
     background: #85dec6;
   }
-
   .code-line--five {
     width: 65%;
     margin-left: 12%;
     background: #aa83ff;
   }
-
   .code-line--six {
     width: 42%;
     background: #79a6ff;
@@ -413,28 +353,21 @@ import PanelFrame from "../ui/PanelFrame.astro";
     display: flex;
     flex-direction: column;
     gap: 10px;
-
     height: 100%;
     padding: 12px;
-
     border: 1px solid #654c7a;
     border-radius: 12px;
-
     background: #0d1020;
-
     box-shadow:
       0 10px 35px #05040e,
       0 0 35px rgba(255, 177, 122, 0.12);
   }
-
   .video-preview {
     display: grid;
     place-items: center;
     flex: 1;
     min-height: 0;
-
     border-radius: 6px;
-
     background:
       radial-gradient(
         ellipse at 60% 85%,
@@ -448,81 +381,180 @@ import PanelFrame from "../ui/PanelFrame.astro";
         #231c3b
       );
   }
-
   .video-play {
     display: grid;
     place-items: center;
-
     width: 35px;
     height: 35px;
-
     color: white;
     border: 1px solid rgba(255,255,255,0.65);
     border-radius: 50%;
     background: rgba(8, 11, 22, 0.65);
     font-size: 0.85rem;
   }
-
   .video-timeline {
     display: grid;
     grid-template-columns: 2fr 1fr 1.5fr 1fr;
     gap: 4px;
     height: 32px;
   }
-
   .video-timeline span {
     border-radius: 3px;
     background: #8053c4;
   }
-
   .video-timeline span:nth-child(2) {
     background: #de8e8b;
   }
-
   .video-timeline span:nth-child(3) {
     background: #638ccb;
   }
-
   .video-timeline span:nth-child(4) {
     background: #b17af6;
   }
 
-  /* Tablets */
+  /* Tablet: dois cards confortáveis ou uma coluna em telas médias */
   @media (max-width: 1080px) {
     .services-layout {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
     .services-intro {
       grid-column: 1 / -1;
       max-width: 620px;
+      padding: 0 0 0.75rem;
+    }
+    .service-card {
+      min-height: 280px;
+    }
+    .service-card__content {
+      width: 62%;
+    }
+    .service-card__art {
+      width: 50%;
+      right: -8%;
+      opacity: 0.75;
     }
   }
 
-  /* Celulares */
-  @media (max-width: 680px) {
-    .services-layout {
-      grid-template-columns: 1fr;
+  /* Evita dois cards comprimidos no tablet */
+  @media (max-width: 900px) {
+    .services-showcase {
+      padding-block: 2.5rem;
     }
-
+    .services-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+    }
+    .services-intro {
+      grid-column: auto;
+      max-width: 680px;
+    }
+    .services-intro h2 {
+      font-size: clamp(1.7rem, 4.3vw, 2.25rem);
+      line-height: 1.18;
+    }
     .service-card {
       min-height: 260px;
     }
-
-    .service-card__art {
-      opacity: 0.45;
-    }
-
     .service-card__content {
-      width: 80%;
+      width: 60%;
+    }
+    .service-card__art {
+      width: 44%;
+      right: -3%;
+      top: 13%;
+      height: 73%;
+      opacity: 0.85;
     }
   }
 
+  /* No celular, ilustração e conteúdo deixam de disputar espaço */
+  @media (max-width: 620px) {
+    .services-showcase {
+      padding-block: 2.1rem;
+    }
+    .services-layout {
+      gap: 0.9rem;
+    }
+    .services-intro {
+      padding: 0 0 0.6rem;
+    }
+    .services-intro h2 {
+      margin-block: 0.85rem;
+      font-size: clamp(1.65rem, 7vw, 2.15rem);
+    }
+    .services-intro p {
+      font-size: 0.94rem;
+      line-height: 1.7;
+    }
+    .service-card {
+      flex-direction: column;
+      min-height: 0;
+      gap: 1.2rem;
+      padding: 1.25rem;
+    }
+    .service-card__art {
+      position: relative;
+      inset: auto;
+      order: 0;
+      align-self: center;
+      flex: 0 0 auto;
+      width: min(100%, 340px);
+      height: 148px;
+      opacity: 0.92;
+      transform: none;
+    }
+    .code-window,
+    .video-window {
+      height: 100%;
+    }
+    .code-window__body {
+      gap: 8px;
+      padding: 13px 12px;
+    }
+    .service-card__content {
+      order: 1;
+      width: 100%;
+      min-height: 0;
+    }
+    .service-card__icon {
+      width: 38px;
+      height: 38px;
+      margin-bottom: 1rem;
+    }
+    .service-card h3 {
+      font-size: clamp(1.15rem, 4.5vw, 1.35rem);
+    }
+    .service-card p {
+      max-width: 100%;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+    .service-card__tags {
+      margin-top: 1rem;
+      padding-top: 0;
+    }
+    .service-card__arrow {
+      top: 0.85rem;
+      right: 0.85rem;
+    }
+  }
+
+  /* Pequenos aparelhos sem cortar chips ou ilustrações */
+  @media (max-width: 380px) {
+    .service-card {
+      padding: 1.05rem;
+    }
+    .service-card__art {
+      height: 132px;
+    }
+    .service-card__tags {
+      gap: 0.35rem;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     .service-card {
       transition: none;
     }
-
     .service-card:hover {
       transform: none;
     }
