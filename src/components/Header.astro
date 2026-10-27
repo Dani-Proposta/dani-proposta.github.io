@@ -193,32 +193,44 @@ const initialActive =
     outline-offset: 3px;
   }
 
-  /* Telas intermediárias */
+  /* Tablet: mantém a centralização com links mais compactos */
   @media (max-width: 900px) {
+    .site-header__inner {
+      width: min(var(--content-width), 94%);
+      gap: 0.5rem;
+    }
+
     .site-nav__link {
       padding-inline: 0.72rem;
       font-size: 0.78rem;
     }
   }
 
-  /* Navegação adaptada para celular */
+  /* Celular: cinco abas visíveis, com rolagem só quando necessária */
   @media (max-width: 720px) {
     .site-header__inner {
       grid-template-columns: minmax(0, 1fr);
       gap: 0.65rem;
-
+      min-height: 0;
       padding-block: 0.8rem;
     }
 
     .site-nav {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(max-content, 1fr));
       justify-self: stretch;
-      justify-content: flex-start;
+      justify-content: initial;
+      gap: 0.15rem;
 
       width: 100%;
       min-width: 0;
+      padding: 0.3rem;
+      border-radius: 18px;
 
       overflow-x: auto;
+      overscroll-behavior-x: contain;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     .site-nav::-webkit-scrollbar {
@@ -226,12 +238,28 @@ const initialActive =
     }
 
     .site-nav__link {
-      padding: 0.55rem 0.8rem;
-      font-size: 0.76rem;
+      min-width: 0;
+      padding: 0.6rem 0.3rem;
+      font-size: 0.74rem;
+      white-space: nowrap;
+      text-align: center;
     }
 
     .site-header__balance {
       display: none;
+    }
+  }
+
+  /* Celulares estreitos: reduz a largura mínima das abas */
+  @media (max-width: 400px) {
+    .site-nav {
+      gap: 0.1rem;
+      padding: 0.25rem;
+    }
+
+    .site-nav__link {
+      padding: 0.58rem 0.2rem;
+      font-size: 0.68rem;
     }
   }
 

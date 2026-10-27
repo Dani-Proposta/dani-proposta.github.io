@@ -1,14 +1,13 @@
 
 ---
-import { site } from "../config/site";
+import { portfolioContact } from "../config/site";
 
 const year = new Date().getFullYear();
 
-/* Evita informações vazias no rodapé */
-const siteName = site.name?.trim() || "Dani";
-const githubUrl =
-  site.github?.trim() || "https://github.com/Dani-Proposta";
-const email = site.email?.trim() || "";
+/* Identidade e contatos centralizados na configuração */
+const siteName = "Dani";
+const githubUrl = portfolioContact.github.trim();
+const email = portfolioContact.email.trim();
 ---
 
 <footer class="site-footer">
@@ -24,14 +23,16 @@ const email = site.email?.trim() || "";
     </div>
 
     <nav class="site-footer__links" aria-label="Links do rodapé">
-      <a
-        href={githubUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span class="site-footer__dot" aria-hidden="true"></span>
-        GitHub
-      </a>
+      {githubUrl && (
+        <a
+          href={githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="site-footer__dot" aria-hidden="true"></span>
+          GitHub
+        </a>
+      )}
 
       {email && (
         <a href={`mailto:${email}`}>
@@ -186,8 +187,8 @@ const email = site.email?.trim() || "";
     outline-offset: 3px;
   }
 
-  /* Layout compacto para celular */
-  @media (max-width: 640px) {
+  /* Layout compacto para celular e tablet estreito */
+  @media (max-width: 720px) {
     .site-footer__inner {
       flex-direction: column;
       align-items: center;
@@ -195,7 +196,24 @@ const email = site.email?.trim() || "";
     }
 
     .site-footer__links {
+      width: 100%;
       justify-content: center;
+    }
+
+    .site-footer__links a {
+      min-height: 44px;
+    }
+  }
+
+  /* Evita aperto dos links em telas muito pequenas */
+  @media (max-width: 360px) {
+    .site-footer__links {
+      gap: 0.5rem;
+    }
+
+    .site-footer__links a {
+      padding-inline: 0.75rem;
+      font-size: 0.75rem;
     }
   }
 
