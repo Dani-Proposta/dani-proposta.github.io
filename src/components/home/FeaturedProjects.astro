@@ -33,12 +33,9 @@ import CosmicButton from "../ui/CosmicButton.astro";
         />
 
 
-        <h2 id="featured-title">
-        Da ideia à 
-        <span class="glow-word glow-word--warm">
-            &nbsp;execução.
-        </span>
-        </h2>
+      <h2 id="featured-title">
+        Da ideia à <span class="glow-word glow-word--warm">execução.</span>
+      </h2>
 
 
       <p>
@@ -136,9 +133,11 @@ import CosmicButton from "../ui/CosmicButton.astro";
     grid-template-columns: minmax(200px, 0.85fr) minmax(0, 2.4fr);
     align-items: start;
     gap: 1.25rem;
+    min-width: 0;
   }
 
   .featured-intro {
+    min-width: 0;
     padding: 1.25rem 1rem 0 0;
   }
 
@@ -188,6 +187,8 @@ import CosmicButton from "../ui/CosmicButton.astro";
 
   /* Cards */
   .featured-card {
+    position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -211,6 +212,11 @@ import CosmicButton from "../ui/CosmicButton.astro";
     transform: translateY(-4px);
     border-color: var(--color-border-highlight);
     box-shadow: var(--shadow-panel), var(--shadow-glow);
+  }
+
+  .featured-card:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
   }
 
   /* Ilustração abstrata */
@@ -298,6 +304,7 @@ import CosmicButton from "../ui/CosmicButton.astro";
     flex-direction: column;
     flex: 1;
     gap: 0.8rem;
+    min-width: 0;
     padding: 1.2rem;
   }
 
@@ -389,10 +396,48 @@ import CosmicButton from "../ui/CosmicButton.astro";
     margin-bottom: 0;
   }
 
-  /* Responsividade */
+  /* Tablet */
   @media (max-width: 900px) {
     .featured-layout {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+
+    .featured-intro {
+      max-width: 680px;
+      padding: 0;
+    }
+  }
+
+  /* Celular */
+  @media (max-width: 620px) {
+    .featured-section {
+      padding-block: 2.5rem 3.5rem;
+    }
+
+    .featured-intro h2 {
+      font-size: clamp(1.75rem, 6vw, 2.15rem);
+    }
+
+    .featured-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .featured-card__art {
+      height: 130px;
+    }
+
+    .featured-card__body {
+      padding: 1rem;
+    }
+
+    .featured-card__metadata {
+      gap: 0.35rem 0.75rem;
+    }
+
+    .featured-empty {
+      min-height: 0;
+      padding: 1.5rem;
     }
   }
 

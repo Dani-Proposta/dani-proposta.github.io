@@ -16,22 +16,22 @@ interface ContactChannel {
   external: boolean;
 }
 
-// Aceita username ou número de telefone.
-const whatsappValue = portfolioContact.whatsapp
-  .trim()
-  .replace(/^@/, "");
-
+// Links wa.me exigem número internacional; username isolado não funciona.
+const whatsappValue = portfolioContact.whatsapp.trim();
+const whatsappDigits = whatsappValue.replace(/\D/g, "");
 const whatsappIsPhone =
   /^\+?[0-9().\s-]+$/.test(whatsappValue) &&
-  /\d/.test(whatsappValue);
+  whatsappDigits.length >= 8 &&
+  whatsappDigits.length <= 15;
 
-const whatsappHref = whatsappValue
-  ? `https://wa.me/${
-      whatsappIsPhone
-        ? whatsappValue.replace(/\D/g, "")
-        : encodeURIComponent(whatsappValue)
-    }`
-  : "";
+const whatsappIsLink =
+  /^https:\/\/(?:wa\.me\/\d{8,15}|api\.whatsapp\.com\/send\?phone=\d{8,15})\/?$/i.test(whatsappValue);
+
+const whatsappHref = whatsappIsPhone
+  ? `https://wa.me/${whatsappDigits}`
+  : whatsappIsLink
+    ? whatsappValue
+    : "";
 
 // Canais de contato.
 const channels: ContactChannel[] = [
@@ -114,8 +114,8 @@ import PanelFrame from "../ui/PanelFrame.astro";
       class:list={[
         "contact-grid",
         {
-          "contact-grid--single":
-            activeChannels.length === 1
+          "contact-grid--single": activeChannels.length === 1,
+          "contact-grid--three": activeChannels.length === 3
         }
       ]}
     >
@@ -352,6 +352,10 @@ import PanelFrame from "../ui/PanelFrame.astro";
     grid-template-columns: 1fr;
   }
 
+  .contact-grid--three .contact-card:last-child {
+    grid-column: 1 / -1;
+  }
+
   /* Cards */
   .contact-card {
     --channel-color: var(--color-accent);
@@ -395,6 +399,11 @@ import PanelFrame from "../ui/PanelFrame.astro";
     box-shadow:
       0 12px 30px rgba(0, 0, 0, 0.24),
       0 0 22px rgba(177, 139, 255, 0.12);
+  }
+
+  .contact-card:focus-visible {
+    outline: 2px solid var(--channel-color);
+    outline-offset: 3px;
   }
 
   /* Detalhe de engenharia */
@@ -496,21 +505,56 @@ import PanelFrame from "../ui/PanelFrame.astro";
     border: 0;
   }
 
-  /* Responsividade */
+  /* Tablet */
   @media (max-width: 900px) {
     .contact-panel {
-      grid-template-columns: 1fr;
-      gap: 2rem;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.75rem;
     }
   }
 
-  @media (max-width: 480px) {
+  /* Celular */
+  @media (max-width: 620px) {
+    .contact-section {
+      padding-block: 2.5rem 4rem;
+    }
+
+    .contact-panel {
+      gap: 1.5rem;
+      padding: clamp(1.15rem, 4.5vw, 1.75rem);
+    }
+
+    .contact-intro h2 {
+      font-size: clamp(1.85rem, 6vw, 2.4rem);
+    }
+
+    .contact-note {
+      display: block;
+      line-height: 1.6;
+    }
+
     .contact-grid {
-      grid-template-columns: 1fr;
+      gap: 0.7rem;
     }
 
     .contact-card {
-      min-height: 120px;
+      min-height: 130px;
+      padding: 1rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .contact-grid--three .contact-card:last-child {
+      grid-column: auto;
+    }
+
+    .contact-card {
+      min-height: 112px;
+      gap: 0.8rem;
     }
   }
 

@@ -122,6 +122,7 @@ import PanelFrame from "../ui/PanelFrame.astro";
   ====================================== */
 
   .faq-intro {
+    min-width: 0;
     padding: 1.25rem 1rem 0 0;
   }
 
@@ -234,11 +235,17 @@ import PanelFrame from "../ui/PanelFrame.astro";
     display: flex;
     align-items: center;
     gap: 1rem;
-
+    min-width: 0;
+    min-height: 62px;
     padding: 1.2rem 1.3rem;
-
     cursor: pointer;
     list-style: none;
+  }
+
+  .faq-question:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -3px;
+    border-radius: var(--radius-md);
   }
 
   .faq-question::-webkit-details-marker {
@@ -246,6 +253,7 @@ import PanelFrame from "../ui/PanelFrame.astro";
   }
 
   .faq-number {
+    flex: 0 0 auto;
     color: var(--color-accent);
     font-size: 0.72rem;
     font-weight: 700;
@@ -254,7 +262,8 @@ import PanelFrame from "../ui/PanelFrame.astro";
 
   .faq-question__text {
     flex: 1;
-
+    min-width: 0;
+    overflow-wrap: break-word;
     color: var(--color-text);
     font-size: 0.95rem;
     font-weight: 600;
@@ -330,41 +339,51 @@ import PanelFrame from "../ui/PanelFrame.astro";
     line-height: 1.75;
   }
 
-  /* ======================================
-     RESPONSIVIDADE
-  ====================================== */
-
+  /* Tablet */
   @media (max-width: 900px) {
     .faq-layout {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
     }
 
     .faq-intro {
       max-width: 620px;
+      padding: 0;
     }
   }
 
-  @media (max-width: 480px) {
+  /* Celular */
+  @media (max-width: 620px) {
+    .faq-section {
+      padding-block: 2.5rem 3.5rem;
+    }
+
     .faq-question {
-      gap: 0.7rem;
+      gap: 0.75rem;
       padding: 1rem;
+    }
+
+    .faq-question__text {
+      font-size: 0.9rem;
+    }
+
+    .faq-toggle {
+      flex-basis: 26px;
+      width: 26px;
+      height: 26px;
     }
 
     .faq-answer {
       margin-inline: 1rem;
-      padding-inline: 0;
-    }
-
-    .faq-question__text {
-      font-size: 0.88rem;
+      padding: 0 0 1.1rem;
     }
   }
-    @supports (interpolate-size: allow-keywords) and
+
+  @supports (interpolate-size: allow-keywords) and
             selector(details::details-content) {
 
-    .faq-list {
-        interpolate-size: allow-keywords;
+    .faq-item {
+      interpolate-size: allow-keywords;
     }
 
     .faq-item::details-content {
