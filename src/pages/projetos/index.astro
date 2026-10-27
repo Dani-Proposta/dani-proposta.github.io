@@ -1,4 +1,3 @@
-
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
@@ -288,6 +287,7 @@ const projectCountLabel =
   }
 
   .projects-intro__copy {
+    min-width: 0;
     max-width: 750px;
   }
 
@@ -440,6 +440,8 @@ const projectCountLabel =
     display: flex;
     flex-wrap: wrap;
     gap: 0.65rem;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .projects-filter {
@@ -447,6 +449,7 @@ const projectCountLabel =
     align-items: center;
     gap: 0.75rem;
 
+    min-width: 0;
     min-height: 42px;
     padding: 0.65rem 0.95rem;
 
@@ -514,12 +517,12 @@ const projectCountLabel =
     font-size: 0.76rem;
   }
 
-  /* Grid original preservado */
+  /* Mantém cards com largura consistente mesmo com um único projeto */
   .projects-grid {
     display: grid;
 
     grid-template-columns:
-      repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      repeat(auto-fill, minmax(min(100%, 300px), 1fr));
 
     align-items: stretch;
     gap: 1.5rem;
@@ -630,20 +633,33 @@ const projectCountLabel =
   /* Adaptação para celulares */
   @media (max-width: 600px) {
     .projects-intro {
-      padding: 2rem 1.4rem;
+      margin-top: 2rem;
+      padding: clamp(1.25rem, 5vw, 2rem);
     }
 
     .projects-intro__content {
       flex-direction: column;
+      align-items: stretch;
       gap: 1.5rem;
     }
 
-    .projects-intro__counter {
-      flex-direction: row;
-      justify-content: center;
-      gap: 0.75rem;
+    .projects-intro h1 {
+      font-size: clamp(2rem, 9vw, 3rem);
+    }
 
+    .projects-intro__counter {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 0.5rem;
       width: 100%;
+      min-width: 0;
+      padding: 0.85rem 0.6rem;
+    }
+
+    .projects-intro__counter span {
+      min-width: 0;
+      font-size: 0.57rem;
+      letter-spacing: 0.08em;
     }
 
     .projects-intro__counter strong {
@@ -653,19 +669,39 @@ const projectCountLabel =
 
     .projects-intro__footer {
       margin-top: 2rem;
+      line-height: 1.5;
     }
 
+    .projects-catalog {
+      padding-top: 3rem;
+    }
+
+    /* Filtros podem ocupar uma ou duas colunas sem transbordar */
     .projects-filters {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 165px), 1fr)
+      );
       width: 100%;
+      gap: 0.6rem;
     }
 
     .projects-filter {
-      flex: 1;
-      justify-content: center;
+      width: 100%;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.65rem 0.75rem;
+      text-align: left;
     }
 
     .projects-grid {
       grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    .projects-bottom {
+      margin-bottom: 3rem;
     }
   }
 
@@ -682,22 +718,21 @@ const projectCountLabel =
 </style>
 
 <script>
-  /* Filtragem sem recarregar a página */
-  const catalog = document.querySelector<HTMLElement>(
-    "[data-project-catalog]"
-  );
+  /* Inicializa os filtros após carregamento e navegações Astro */
+  function setupProjectCatalog() {
+    const catalog = document.querySelector<HTMLElement>(
+      "[data-project-catalog]"
+    );
 
-  if (catalog) {
+    if (!catalog || catalog.dataset.filtersReady === "true") return;
+    catalog.dataset.filtersReady = "true";
+
     const buttons = Array.from(
-      catalog.querySelectorAll<HTMLButtonElement>(
-        "[data-filter]"
-      )
+      catalog.querySelectorAll<HTMLButtonElement>("[data-filter]")
     );
 
     const cards = Array.from(
-      catalog.querySelectorAll<HTMLElement>(
-        "[data-project-service]"
-      )
+      catalog.querySelectorAll<HTMLElement>("[data-project-service]")
     );
 
     const results = catalog.querySelector<HTMLElement>(
@@ -709,17 +744,14 @@ const projectCountLabel =
 
       cards.forEach((card) => {
         const matches =
-          filter === "all" ||
-          card.dataset.projectService === filter;
+          filter === "all" || card.dataset.projectService === filter;
 
         card.hidden = !matches;
-
         if (matches) visibleCount++;
       });
 
       buttons.forEach((button) => {
         const active = button.dataset.filter === filter;
-
         button.classList.toggle("is-active", active);
         button.setAttribute("aria-pressed", String(active));
       });
@@ -738,4 +770,7 @@ const projectCountLabel =
       });
     });
   }
+
+  setupProjectCatalog();
+  document.addEventListener("astro:page-load", setupProjectCatalog);
 </script>
