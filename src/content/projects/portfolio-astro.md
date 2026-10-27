@@ -10,8 +10,20 @@ technologies:
   - "CSS"
   - "GitHub Actions"
 
-status: "em-desenvolvimento"
+status: "concluido"
 featured: true
+
+cover: "/images/projects/portfolio-astro/cover.webp"
+
+gallery:
+  - src: "/images/projects/portfolio-astro/cover.webp"
+    alt: "Capa do portfólio"
+    caption: "Teste da primeira imagem"
+
+  - src: "/images/projects/portfolio-astro/cover.webp"
+    alt: "Capa do portfólio - 2"
+    caption: "Teste da segunda imagem"
+
 
 repository: "https://github.com/Dani-Proposta/dani-proposta.github.io"
 demo: "https://dani-proposta.github.io/"
